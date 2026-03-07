@@ -41,9 +41,11 @@
         <h2>Add New Product</h2>
         <img id="imgPreview" class="preview-img" src="" alt="Image Preview">
         <form id="productForm">
-            <input type="text" id="pName" placeholder="Product Name (e.g. Apple)" required>
+            <input type="text" id="pId" placeholder="Product ID (e.g. P001)" required>
+            <input type="text" id="pName" placeholder="Product Name" required>
             <input type="text" id="pWeight" placeholder="Weight (e.g. 250g)" required>
             <input type="number" id="pPrice" placeholder="Price (Rs.)" required>
+            <input type="number" id="pStock" placeholder="Stock Quantity" required>
             
             <label>Category:</label>
             <select id="pCategory">
@@ -65,7 +67,6 @@
         const pImg = document.getElementById('pImg');
         const imgPreview = document.getElementById('imgPreview');
 
-        // Show preview when image is selected
         pImg.addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
@@ -78,24 +79,31 @@
         document.getElementById('productForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // Create product object
             const newProduct = {
+                id: document.getElementById('pId').value,
                 name: document.getElementById('pName').value,
                 weight: document.getElementById('pWeight').value,
                 price: document.getElementById('pPrice').value,
+                stock: document.getElementById('pStock').value,
                 category: document.getElementById('pCategory').value,
-                // Using the DataURL for simulation (In a real app, you'd send the file to a server)
                 image: imgPreview.src 
             };
 
-            // Save to LocalStorage
+            // 1. Save to LocalStorage for immediate display in order.html
             let products = JSON.parse(localStorage.getItem('customProducts')) || [];
             products.push(newProduct);
             localStorage.setItem('customProducts', JSON.stringify(products));
 
-            alert("Product added successfully!");
-            this.reset();
-            imgPreview.src = "";
+            // 2. Send to Java Backend to save in .txt file
+            fetch('ProductDataServlet', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newProduct)
+            }).then(response => {
+                alert("Product saved to System and Text File!");
+                this.reset();
+                imgPreview.src = "";
+            }).catch(err => console.error("Java Server not running, but saved to local session."));
         });
     </script>
 </body>
