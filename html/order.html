@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+    <title>FreshMart | Online Grocery</title>
+    <link rel="stylesheet" href="css/order.css">
+    <script src="javascript/order.js"></script>
+</head>
+<body>
+<header class="navbar">
+    <h1 class="head">FreshMart</h1>
+    <nav>
+        <span id="admin-link-container"></span>
+        <a href="test.html">Home</a>
+        <a href="#">About</a>
+        <a href="#">Category</a>
+        <a href="login.html" id="auth-link">Log in</a> 
+    </nav>
+</header>
+
+<section class="hero">
+    <h2>from Farm to your Table</h2>
+    <p>Healthy • Organic • Affordable</p>
+</section>
+
+<section class="categories">
+    <h2>Category</h2>
+    <div class="category-container">
+        <button class="category-btn active" data-category="all">All</button>
+        <button class="category-btn" data-category="fruits">Fruits</button>
+        <button class="category-btn" data-category="vegetables">Vegetables</button>
+        <button class="category-btn" data-category="dairy">Dairy</button>
+        <button class="category-btn" data-category="forzen_food">Forzen Food</button>
+        <button class="category-btn" data-category="grocery">Grocery</button>
+    </div>
+</section>
+
+<section class="products">
+    <div class="product-card" data-category="fruits">
+        <img src="images/products_pics/PRNF.png" alt="Apple">
+        <h3>Apple | 250g</h3>
+        <p>Rs.90.00</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+    </div>
+
+    <div class="product-card" data-category="vegetables">
+        <img src="images/products_pics/PRNF.png" alt="Tomato">
+        <h3>Tomato | 250g</h3>
+        <p>Rs.140.00</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+    </div>
+
+    <div class="product-card" data-category="vegetables">
+        <img src="images/products_pics/PRNF.png" alt="bell_peppers">
+        <h3>Red Bell Peppers | 250g</h3>
+        <p>Rs.400.00</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+    </div>
+
+    <div class="product-card" data-category="fruits">
+        <img src="images/products_pics/PRNF.png" alt="Banana">
+        <h3>Banana | 250g</h3>
+        <p>Rs.120.00</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+    </div>
+
+    <div class="product-card" data-category="vegetables">
+        <img src="images/products_pics/PRNF.png" alt="Carrots">
+        <h3>Carrots | 250g</h3>
+        <p>Rs.90.00</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+    </div>
+
+    <div class="product-card" data-category="vegetables">
+        <img src="images/products_pics/PRNF.png" alt="Potato">
+        <h3>Potato | 500g</h3>
+        <p>Rs.140.00</p>
+        <button onclick="addToCart(this)">Add to Cart</button>
+    </div>
+
+    </section>
+
+<center><img src="images/banner2.png" alt="banner2" width="" height="420"></center>
+
+<section class="footer">
+        <h2><b>FreshMart</b></h2>
+        <p>Healthy Living</p>
+        <p>
+        &copy; 2026 All Rights Reserved By FreshMart
+        </p>
+</section>
+
+<div id="cart-island" class="cart-island">
+    <div class="island-content">
+        <span id="island-text">Item Added!</span>
+        <span class="island-count" id="island-count">0</span>
+    </div>
+</div>
+
+<button id="topBtn">
+    <img src="images/top_Arrow.png">
+</button>
+
+</body>
+</html>
