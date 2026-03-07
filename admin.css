@@ -10,6 +10,7 @@
 body{
     background:#f8f9fa;
     color:#333;
+    padding-bottom: 100px;
 }
 
 /* NAVBAR */
@@ -90,6 +91,7 @@ body{
     margin-right: 200px;
     grid-template-columns:repeat(4, 1fr);
     gap:20px;
+    flex: 1;
 }
 
 /* PRODUCT CARD */
@@ -147,5 +149,12 @@ body{
     padding:30px;
     background-color: white;
     margin-top:40px;
-    position:relative;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    text-align: center;
+    z-index: 1000;
+    border-top: 1px solid #ddd;
 }
