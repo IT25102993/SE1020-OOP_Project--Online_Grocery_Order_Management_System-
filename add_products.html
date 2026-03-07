@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Add Product</title>
     <link rel="stylesheet" href="order.css">
     <style>
@@ -21,14 +20,6 @@
             border: 1px solid #ddd;
             border-radius: 8px;
         }
-        .preview-img {
-            width: 100%;
-            height: 150px;
-            object-fit: contain;
-            background: #eee;
-            margin-bottom: 10px;
-            border-radius: 8px;
-        }
     </style>
 </head>
 <body>
@@ -39,72 +30,23 @@
 
     <div class="admin-form">
         <h2>Add New Product</h2>
-        <img id="imgPreview" class="preview-img" src="" alt="Image Preview">
-        <form id="productForm">
-            <input type="text" id="pId" placeholder="Product ID (e.g. P001)" required>
-            <input type="text" id="pName" placeholder="Product Name" required>
-            <input type="text" id="pWeight" placeholder="Weight (e.g. 250g)" required>
-            <input type="number" id="pPrice" placeholder="Price (Rs.)" required>
-            <input type="number" id="pStock" placeholder="Stock Quantity" required>
+        <form action="SaveProduct" method="POST">
+            <input type="text" name="pId" placeholder="Product ID (e.g., P001)" required>
+            <input type="text" name="pName" placeholder="Product Name" required>
+            <input type="number" name="pPrice" placeholder="Price (Rs.)" required>
+            <input type="number" name="pStock" placeholder="Stock Quantity" required>
             
             <label>Category:</label>
-            <select id="pCategory">
+            <select name="pCategory">
                 <option value="fruits">Fruits</option>
                 <option value="vegetables">Vegetables</option>
                 <option value="dairy">Dairy</option>
                 <option value="frozen_food">Frozen Food</option>
                 <option value="grocery">Grocery</option>
             </select>
-
-            <label>Product Image:</label>
-            <input type="file" id="pImg" accept="image/*" required>
             
-            <button type="submit" class="category-btn active" style="width:100%">Add to Inventory</button>
+            <button type="submit" class="category-btn active" style="width:100%; margin-top:20px;">Save to File</button>
         </form>
     </div>
-
-    <script>
-        const pImg = document.getElementById('pImg');
-        const imgPreview = document.getElementById('imgPreview');
-
-        pImg.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => imgPreview.src = e.target.result;
-                reader.readAsDataURL(file);
-            }
-        });
-
-        document.getElementById('productForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const newProduct = {
-                id: document.getElementById('pId').value,
-                name: document.getElementById('pName').value,
-                weight: document.getElementById('pWeight').value,
-                price: document.getElementById('pPrice').value,
-                stock: document.getElementById('pStock').value,
-                category: document.getElementById('pCategory').value,
-                image: imgPreview.src 
-            };
-
-            // 1. Save to LocalStorage for immediate display in order.html
-            let products = JSON.parse(localStorage.getItem('customProducts')) || [];
-            products.push(newProduct);
-            localStorage.setItem('customProducts', JSON.stringify(products));
-
-            // 2. Send to Java Backend to save in .txt file
-            fetch('ProductDataServlet', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newProduct)
-            }).then(response => {
-                alert("Product saved to System and Text File!");
-                this.reset();
-                imgPreview.src = "";
-            }).catch(err => console.error("Java Server not running, but saved to local session."));
-        });
-    </script>
 </body>
 </html>
