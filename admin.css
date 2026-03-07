@@ -28,9 +28,6 @@ body{
 .head{
     color:#2a5298;
     text-align: left;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
 .navbar a{
@@ -139,7 +136,6 @@ body{
     margin-top:40px;
     position:relative;
 }
-
 
 /* GO TO TOP BUTTON */
 #topBtn{
