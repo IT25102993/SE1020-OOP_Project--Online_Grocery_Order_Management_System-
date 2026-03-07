@@ -28,8 +28,7 @@ body{
 .head{
     color:#2a5298;
     text-align: left;
-    display: flex;
-    align-items: center;
+    display:flex;
     gap: 10px;
 }
 

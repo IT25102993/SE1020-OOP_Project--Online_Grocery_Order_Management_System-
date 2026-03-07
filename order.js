@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
             adminContainer.innerHTML = `<a href="admin.html" target="_blank" style="color: red; font-weight: bold; margin-right:15px;">Add Products</a>`;
         }
         if (currentUser === "admin@gmail.com") {
-            admin.innerHTML = `<h4 style="color: red;  ">Admin</h4>`;
+            admin.innerHTML = `<h4 style="color: red;">Admin</h4>`;
         }
 
         document.getElementById("logout-btn").addEventListener("click", () => {
