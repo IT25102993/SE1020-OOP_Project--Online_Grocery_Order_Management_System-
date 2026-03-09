@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProAdmin | Dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bxl-codepen'></i>
+            <span class="logo_name">FreshMart</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active"><i class='bx bx-grid-alt'></i><span class="links_name">Dashboard</span></a></li>
+            <li><a href="add_products.html"><i class='bx bx-box'></i><span class="links_name">Products</span></a></li>
+            <li><a href="#"><i class='bx bx-list-ul'></i><span class="links_name">Order List</span></a></li>
+            <li><a href="#"><i class='bx bx-pie-chart-alt-2'></i><span class="links_name">Analytics</span></a></li>
+            <li><a href="#"><i class='bx bx-user'></i><span class="links_name">Team</span></a></li>
+            <li><a href="#"><i class='bx bx-cog'></i><span class="links_name">Settings</span></a></li>
+            <li class="log_out"><a href="#"><i class='bx bx-log-out'></i><span class="links_name">Log out</span></a></li>
+        </ul>
+    </div>
+
+    <section class="home-section">
+        <nav>
+            <div class="sidebar-button">
+                <i class='bx bx-menu sidebarBtn'></i>
+                <span class="dashboard">Dashboard</span>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Search...">
+                <i class='bx bx-search'></i>
+            </div>
+            <div class="profile-details">
+                <!--<img src="https://ui-avatars.com/api/?name=Admin+User" alt="">-->
+                <span class="admin_name">Admin</span>
+            </div>
+        </nav>
+
+        <div class="home-content">
+            <div class="overview-boxes">
+                <div class="box">
+                    <div class="right-side">
+                        <div class="box-topic">Total Sales</div>
+                        <div class="number">40,876</div>
+                        <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text">Up from yesterday</span></div>
+                    </div>
+                    <i class='bx bx-cart-alt cart'></i>
+                </div>
+                <div class="box">
+                    <div class="right-side">
+                        <div class="box-topic">Total Revenue</div>
+                        <div class="number">$12,450</div>
+                        <div class="indicator"><i class='bx bx-up-arrow-alt'></i><span class="text">Up from yesterday</span></div>
+                    </div>
+                    <i class='bx bxs-wallet-alt cart two'></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="admin.js"></script>
+</body>
+</html>
