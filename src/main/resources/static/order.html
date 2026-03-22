@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+  <title>FreshMart | Online Grocery</title>
+  <link rel="stylesheet" href="css/order.css">
+</head>
+<body>
+  <header class="navbar">
+    <h1 style="color:#14284a">FRESH<span style="color:#1fa831">MART</span></h1>
+    <nav>
+      <span id="admin-link-container"></span><span id="admin-badge"></span>
+      <a href="index.html">Home</a>
+      <a href="login.html" id="auth-link">Log in</a>
+    </nav>
+  </header>
+
+  <!--<section>
+    <h2>From Farm to your Table</h2>
+    <p>Healthy • Organic • Affordable</p>
+  </section>-->
+<main>
+  <section class="categories">
+    <div class="category-container">
+      <button class="category-btn active" data-category="all">
+        <img src="images/index/icons/all_black.png" alt="All">
+        <span class="category-label">All</span>
+      </button>
+      <button class="category-btn" data-category="fruits">
+        <img src="images/index/icons/fruit_black.png" alt="Fruits">
+        <span class="category-label">Fruits</span>
+      </button>
+      <button class="category-btn" data-category="vegetables">
+        <img src="images/index/icons/veg_black.png" alt="Vegetables">
+        <span class="category-label">Vegetables</span>
+      </button>
+      <button class="category-btn" data-category="dairy">
+        <img src="images/index/icons/dairy_black.png" alt="Dairy">
+        <span class="category-label">Dairy</span>
+      </button>
+      <button class="category-btn" data-category="frozen_food">
+        <img src="images/index/icons/frozen_black.png" alt="Frozen Food">
+        <span class="category-label">Frozen</span>
+      </button>
+      <button class="category-btn" data-category="grocery">
+        <img src="images/index/icons/grocery_black.png" alt="Grocery">
+        <span class="category-label">Grocery</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="products" id="product-grid"></section>
+</main>
+  <footer class="footer">
+    <h2><b>FreshMart</b></h2>
+    <p>Healthy Living</p>
+    <p>&copy; 2026 All Rights Reserved By FreshMart</p>
+  </footer>
+
+  <div id="cart-island" class="cart-island">
+    <div class="island-main">
+      <div class="island-content">
+        <span id="island-text">Items in Cart</span>
+        <span class="island-count" id="island-count">0</span>
+      </div>
+    </div>
+    <div class="island-expanded" id="island-expanded">
+        <div class="expanded-info">
+            <span id="expanded-item-name">Item Name</span>
+            <div class="qty-controls">
+                <button class="qty-btn" id="qty-minus">-</button>
+                <input type="number" id="island-qty" value="1" min="1" readonly>
+                <button class="qty-btn" id="qty-plus">+</button>
+            </div>
+        </div>
+        <button class="island-buy-btn" id="island-buy-now">Buy Now</button>
+    </div>
+  </div>
+
+  <button id="topBtn" title="Go to top">
+    <img src="images/top_Arrow.png" alt="Top">
+  </button>
+
+  <script src="js/order.js"></script>
+</body>
+</html>

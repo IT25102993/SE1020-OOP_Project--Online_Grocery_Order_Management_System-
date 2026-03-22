@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+  <title>Register | FreshMart</title>
+  <link rel="stylesheet" href="css/register_login.css">
+</head>
+<body>
+  <header class="navbar">
+    <h1 class="head">FreshMart</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+  <main class="login-wrapper">
+    <div class="container">
+      <form id="registerForm">
+        <h2>Register</h2>
+        <div class="input-field">
+          <input type="text" id="regName" required>
+          <label>Enter your name</label>
+        </div>
+        <div class="input-field">
+          <input type="text" id="regEmail" required>
+          <label>Enter your email</label>
+        </div>
+        <div class="input-field" id="addressWrap">
+          <input type="text" id="regAddress">
+          <label>Enter your address</label>
+        </div>
+        <div class="input-field">
+          <input type="password" id="regPassword" required>
+          <label>Enter your password</label>
+          <img src="images/hidden.png" id="togglePassword" class="toggle-icon" alt="Toggle Visibility">
+        </div>
+        <div class="input-field">
+          <input type="password" id="confirmPassword" required>
+          <label>Re-enter your password</label>
+        </div>
+        <div class="input-field" id="verificationWrap" style="display: none;">
+          <input type="text" id="regValidationCode" placeholder="6-digit code">
+          <label>Verification Code <span id="timerDisplay" style="color: #ffcccc; margin-left: 10px;"></span></label>
+        </div>
+        
+        <button type="button" id="btnSendCode">Send Verification Code</button>
+        <button type="submit" id="btnRegister" style="display: none;">Register</button>
+        
+        <div class="account-options">
+          <p>Already have an account? <a href="login.html">Login</a></p>
+        </div>
+      </form>
+    </div>
+  </main>
+    <div id="cart-island" class="cart-island">
+        <div class="island-content">
+            <span id="island-text">Items in Cart</span>
+            <span class="island-count" id="island-count">0</span>
+        </div>
+    </div>
+
+    <script src="js/register.js"></script>
+    <script src="js/order.js"></script>
+</body>
+</html>

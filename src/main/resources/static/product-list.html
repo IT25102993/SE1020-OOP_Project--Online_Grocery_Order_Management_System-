@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+  <title>FreshMart | Product List</title>
+  <link rel="stylesheet" href="css/product.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo-details">
+      <i class="bx bxl-codepen"></i>
+      <span class="logo_name">FreshMart</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="admin.html"><i class="bx bx-grid-alt"></i><span class="links_name">Dashboard</span></a></li>
+      <li><a href="product-list.html" class="active"><i class="bx bx-box"></i><span class="links_name">Products</span></a></li>
+      <li><a href="add-product.html"><i class="bx bx-plus-circle"></i><span class="links_name">Add Product</span></a></li>
+      <li class="log_out"><a href="order.html"><i class="bx bx-log-out"></i><span class="links_name">Log out</span></a></li>
+    </ul>
+  </div>
+
+  <section class="home-section">
+    <nav>
+      <div class="sidebar-button">
+        <i class="bx bx-menu sidebarBtn"></i>
+        <span class="dashboard">Product List</span>
+      </div>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search by name or ID...">
+        <i class="bx bx-search"></i>
+      </div>
+      <div class="profile-details">
+        <span class="admin_name">Admin</span>
+      </div>
+    </nav>
+
+    <div class="home-content">
+      <h3>Products</h3>
+      <div class="product-table-wrap">
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Product ID</th>
+              <th>Name</th>
+              <th>Price (Rs)</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody">
+            <tr><td colspan="6">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div id="editModal" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <h3>Edit Product</h3>
+      <input type="hidden" id="editId">
+      <input type="text" id="editProductId" placeholder="Product ID">
+      <input type="text" id="editName" placeholder="Product Name">
+      <input type="number" id="editPrice" step="0.01" placeholder="Price">
+      <input type="text" id="editCategory" placeholder="Category">
+      <div class="row">
+        <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+        <button type="button" class="btn-save" onclick="saveEdit()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="qtyModal" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <h3>Add Product Quantity</h3>
+      <p><strong>Product ID:</strong> <span id="qtyProductId"></span></p>
+      <input type="number" id="qtyQuantity" placeholder="Quantity" min="1">
+      <input type="text" id="qtyWhereBought" placeholder="Where you bought the products">
+      <p style="font-size: 12px; color: #666;">Date & time will be saved automatically.</p>
+      <div class="row">
+        <button type="button" class="btn-cancel" onclick="closeQtyModal()">Cancel</button>
+        <button type="button" class="btn-save" onclick="saveQuantity()">Add Quantity</button>
+      </div>
+      <div class="qty-list" id="qtyHistory"></div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+  <script src="js/product-list.js"></script>
+</body>
+</html>
