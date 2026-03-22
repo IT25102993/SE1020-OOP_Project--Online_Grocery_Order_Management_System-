@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+  <title>Customer Accounts | FreshMart</title>
+  <link rel="stylesheet" href="css/register_login.css">
+  <style>
+    .accounts-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 90%;
+      margin: 40px auto;
+      color: white;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: left;
+    }
+    th {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <h1 class="head">FreshMart Admin Portal</h1>
+    <nav>
+      <a href="admin.html">Dashboard</a>
+      <a href="login.html" onclick="sessionStorage.clear()">Logout</a>
+    </nav>
+  </header>
+  <main class="login-wrapper">
+    <div class="accounts-container">
+      <h2>Registered Customers</h2>
+      <table id="customersTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Accounts loaded dynamically here -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <script src="js/customer_accounts.js"></script>
+</body>
+</html>

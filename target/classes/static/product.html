@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+  <title>FreshMart | Product</title>
+  <link rel="stylesheet" href="css/admin.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo-details">
+    <i class="bx bx-leaf"></i>
+    <span class="logo_name">FreshMart</span>
+  </div>
+  <ul class="nav-links">
+    <li>
+      <a href="admin.html">
+        <i class="bx bx-grid-alt"></i>
+        <span class="links_name">Dashboard</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="product.html" class="active"> <i class="bx bx-box"></i>
+        <span class="links_name">Products</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="accounts.html">
+        <i class="bx bx-user-circle"></i>
+        <span class="links_name">Accounts</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="order.html">
+        <i class="bx bx-plus-circle"></i>
+        <span class="links_name">Orders</span>
+      </a>
+    </li>
+
+    <li class="log_out">
+      <a href="login.html">
+        <i class="bx bx-log-out"></i>
+        <span class="links_name">Log out</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<section class="home-section">
+  <nav>
+    <div class="sidebar-button">
+      <i class="bx bx-menu sidebarBtn"></i>
+      <span class="dashboard">Products</span>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Search...">
+    </div>
+    <div class="profile-details">
+      <span class="admin_name" id="adminName">Admin</span>
+    </div>
+  </nav>
+
+  <div class="home-content">
+    <div class="overview-boxes">
+      <div class="box">
+        <div class="right-side">
+          <div class="box-topic">Products Management</div>
+          <div class="number">
+            <a href="product-list.html" style="color: inherit; text-decoration: none;">View list</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="right-side">
+          <div class="box-topic">Products Management</div>
+          <div class="number">
+            <a href="add-product.html" style="color: inherit; text-decoration: none;">Add new</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="js/admin.js"></script>
+<script src="js/product-list.js"></script>
+</body>
+</html>

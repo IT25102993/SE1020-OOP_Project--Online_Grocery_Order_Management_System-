@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreshMart | Order Management</title>
+  <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+  <style>
+    .orders-section {
+      padding: 20px;
+    }
+    .order-item-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      border: 1px solid #edf2f7;
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-REQUESTED { background: #fff3cd; color: #856404; }
+    .status-PROCESSED { background: #cce5ff; color: #004085; }
+    .status-DELIVERY_STARTED { background: #d1ecf1; color: #0c5460; }
+    .status-ARRIVED { background: #d4edda; color: #155724; }
+    .status-COMPLETED { background: #d4edda; color: #155724; }
+
+    .order-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .admin-btn {
+      background: #23b236;
+      color: white;
+      border: none;
+      padding: 6px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .admin-btn.secondary { background: #2a5298; }
+    .driver-select {
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 13px;
+    }
+    .driver-form {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo-details">
+    <i class="bx bx-leaf"></i>
+    <span class="logo_name">FreshMart</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="admin.html"><i class="bx bx-grid-alt"></i><span class="links_name">Dashboard</span></a></li>
+    <li><a href="product.html"><i class="bx bx-box"></i><span class="links_name">Products</span></a></li>
+    <li><a href="accounts.html"><i class="bx bx-user-circle"></i><span class="links_name">Accounts</span></a></li>
+    <li><a href="admin_orders.html" class="active"><i class="bx bx-cart"></i><span class="links_name">Orders</span></a></li>
+    <li class="log_out"><a href="login.html"><i class="bx bx-log-out"></i><span class="links_name">Log out</span></a></li>
+  </ul>
+</div>
+
+<section class="home-section">
+  <nav>
+    <div class="sidebar-button">
+      <i class="bx bx-menu sidebarBtn"></i>
+      <span class="dashboard">Order Management</span>
+    </div>
+    <div class="profile-details">
+      <span class="admin_name" id="adminName">Admin</span>
+    </div>
+  </nav>
+
+  <div class="home-content">
+    <div class="driver-form">
+      <h3>Add New Driver</h3>
+      <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+        <input type="text" id="driver-name" placeholder="Driver Name" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; flex: 1;">
+        <input type="text" id="driver-phone" placeholder="Phone Number" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; flex: 1;">
+        <input type="text" id="driver-vehicle" placeholder="Vehicle (e.g. Bike)" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; flex: 1;">
+        <input type="text" id="driver-vehicle-no" placeholder="Vehicle No" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; flex: 1;">
+        <button class="admin-btn" id="add-driver-btn">Register Driver</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="js/admin.js"></script>
+<script src="js/admin_orders.js"></script>
+</body>
+</html>

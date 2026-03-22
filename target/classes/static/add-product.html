@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+  <title>FreshMart | Add Product</title>
+  <link rel="stylesheet" href="css/admin.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="sidebar">
+
+  <ul class="nav-links">
+
+    <div class="logo-details">
+      <i class="bx bxl-codepen"></i>
+      <span class="logo_name">FreshMart</span>
+    </div>
+
+    <li>
+      <a href="admin.html" class="active">
+        <i class="bx bx-grid-alt"></i>
+        <span class="links_name">Dashboard</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="product.html">
+        <i class="bx bx-box"></i>
+        <span class="links_name">Products</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="name.html">
+        <i class="bx bx-plus-circle"></i>
+        <span class="links_name">Add Product</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="admin_accounts.html">
+        <i class="bx bx-user-circle"></i>
+        <span class="links_name">Admin Accounts</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="customer_accounts.html">
+        <i class="bx bx-group"></i>
+        <span class="links_name">Customer Accounts</span>
+      </a>
+    </li>
+
+    <li class="log_out">
+      <a href="login.html">
+        <i class="bx bx-log-out"></i>
+        <span class="links_name">Log out</span>
+      </a>
+    </li>
+
+  </ul>
+
+</div>
+  <section class="home-section">
+    <nav>
+      <div class="sidebar-button">
+        <i class="bx bx-menu sidebarBtn"></i>
+        <span class="dashboard">Add New Product</span>
+      </div>
+      <div class="profile-details">
+        <span class="admin_name">Admin</span>
+      </div>
+    </nav>
+
+    <div class="home-content">
+      <div class="admin-form">
+        <h2>Add New Product</h2>
+        <div class="preview-box" id="previewBox">
+          <span id="previewPlaceholder">Image preview will appear here after you upload.</span>
+          <img id="imgPreview" src="" alt="Preview" style="display: none;">
+        </div>
+
+        <form id="productForm">
+          <input type="text" id="pId" placeholder="Product ID (e.g. P001)" required>
+          <input type="text" id="pName" placeholder="Product Name" required>
+          <input type="number" id="pPrice" placeholder="Price (Rs.)" step="0.01" required>
+          <label>Category:</label>
+          <select id="pCategory">
+            <option value="fruits">Fruits</option>
+            <option value="vegetables">Vegetables</option>
+            <option value="dairy">Dairy</option>
+            <option value="frozen_food">Frozen Food</option>
+            <option value="grocery">Grocery</option>
+          </select>
+          <label>Product Image (required):</label>
+          <input type="file" id="pImage" accept="image/*" required>
+          <button type="submit" class="category-btn active" style="width:100%; margin-top:20px;">Save Product</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/admin.js"></script>
+  <script src="js/add-product.js"></script>
+</body>
+</html>

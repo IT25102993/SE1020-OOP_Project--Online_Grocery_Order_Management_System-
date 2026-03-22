@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+    <title>FreshMart | Your Cart</title>
+    <link rel="stylesheet" href="css/order.css">
+    <style>
+        .cart-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .cart-item:last-child { border-bottom: none; }
+        .item-info { flex: 1; }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .qty-btn {
+            background: #2a5298;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qty-btn:hover { background: #1e3c72; }
+        .remove-btn {
+            color: #ff4d4d;
+            cursor: pointer;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+        .cart-total {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .cart-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .btn-secondary {
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+        }
+        .btn-primary {
+            padding: 10px 30px;
+            background: #23b236;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <h1 style="color:#14284a">FRESH<span style="color:#1fa831">MART</span></h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="order.html">Shop</a>
+            <a href="login.html" id="auth-link">Log in</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="cart-container">
+            <h2>Your Shopping Cart</h2>
+            <div id="cart-items-container">
+                <!-- Data loaded via JS -->
+            </div>
+            <div id="cart-summary" style="display:none;">
+                <div class="cart-total">Total: Rs. <span id="cart-total-amount">0</span></div>
+                <div class="cart-actions">
+                    <a href="order.html" class="btn-secondary">Continue Shopping</a>
+                    <a href="checkout.html" class="btn-primary">Checkout</a>
+                </div>
+            </div>
+            <div id="cart-empty" class="empty-cart">
+                <p>Your cart is empty.</p>
+                <a href="order.html" class="btn-primary" style="display:inline-block; margin-top:20px;">Go Shopping</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <h2><b>FreshMart</b></h2>
+        <p>Healthy Living</p>
+        <p>&copy; 2026 All Rights Reserved By FreshMart</p>
+    </footer>
+
+    <div id="cart-island" class="cart-island">
+        <div class="island-content">
+            <span id="island-text">Items in Cart</span>
+            <span class="island-count" id="island-count">0</span>
+        </div>
+    </div>
+
+    <script src="js/cart.js"></script>
+    <script src="js/order.js"></script>
+    <script>
+        // Simple auth state for header
+        const currentUser = sessionStorage.getItem('loggedInUser');
+        if (currentUser) {
+            document.getElementById('auth-link').innerHTML = `Logged in: <b>${currentUser}</b>`;
+        }
+    </script>
+</body>
+</html>
