@@ -176,6 +176,7 @@ public class AuthController {
             return ResponseEntity.ok(Map.of("success", true, "message", "Profile updated successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("success", false, "message", e.getMessage()));
+            //update
         }
     }
 }
