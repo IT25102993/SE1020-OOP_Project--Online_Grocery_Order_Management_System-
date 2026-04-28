@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             itemEl.innerHTML = `
                 <div class="item-info">
                     <h3>${item.name}</h3>
-                    <p>Price: Rs. ${item.price}</p>
+                    <p>Price: Rs. ${item.price.toFixed(2)}</p>
                 </div>
                 <div class="quantity-controls">
                     <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             itemsContainer.appendChild(itemEl);
         });
 
-        if (totalSpan) totalSpan.innerText = total;
+        if (totalSpan) totalSpan.innerText = total.toFixed(2);
         if (typeof window.updateIsland === 'function') {
             window.updateIsland();
         }

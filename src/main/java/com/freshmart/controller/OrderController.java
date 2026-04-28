@@ -36,7 +36,7 @@ public class OrderController {
             Order order = new Order();
             order.setCustomer(customer);
             order.setTotalAmount(request.getTotalAmount());
-            
+
             List<OrderItem> items = new ArrayList<>();
             if (request.getItems() != null) {
                 for (OrderItemRequest ir : request.getItems()) {
