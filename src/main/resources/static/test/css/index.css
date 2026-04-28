@@ -1,0 +1,760 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Odibee+Sans&display=swap');
+
+
+
+html, body{
+    scroll-behavior: smooth;
+    height: 100%;
+}
+body::before {
+  content: '';
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: url("../images/img1.jpg");
+  background-position: center;
+  background-size: cover;
+  z-index: -1;
+  /*opacity: 0.7; white opacity*/ 
+  filter: blur(8px);
+  transform: scale(1.1);
+  z-index: -1;
+}
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    align-items: center;
+    padding: 20px 60px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.topBar{
+  padding: 10px 25px;
+  margin: 15px;
+  border: none;
+  border-radius: 30px;
+  transition: 0.05s;
+  border: 1px solid rgba(0, 0, 0, 0.124);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  background-color:rgba(255, 255, 255, 0.124);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center; /* Horizontal alignment */
+  align-items: center;     /* Vertical alignment */
+  gap: 30px;
+}
+
+.topBar-button{
+  padding: 10px 25px;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 5px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.124);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+  background-color:rgba(255, 255, 255, 0.124);
+  transition: all 0.3s ease;
+}
+
+.topBar-button.active{
+    background: #2a5298; 
+    transform: translateY(-2px) scale(0.98);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+.topBar-button:hover {
+    background: white; 
+    color: black; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    background: white; 
+    color: black; 
+    transform: translateY(-5px) scale(1.05); /*pop-up animations*/
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+.promo {
+  position: relative; /* Required for the pseudo-element positioning */
+  overflow: hidden;   /* Keeps the blurred edges inside the pill shape */
+  width: calc(100% - 30px);
+  max-width: 1800px;
+  height: 300px;
+  border-radius: 150px;
+  padding: 20px 40px;
+  margin: 15px auto;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.124);
+  background-color:rgba(255, 255, 255, 0.124);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+  animation: autoShowAnimation both;
+  animation-timeline: view(70% 5%);
+}
+
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+  width: calc(100% - 30px);
+  max-width: 1800px;
+  height: 400px; /* Slightly taller than the header */
+  border-radius: 200px; /* Matching the pill aesthetic */
+  margin: 30px auto;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.carousel-track {
+  display: flex;
+  width: 300%; /* Adjust based on number of slides */
+  height: 100%;
+  animation: slideScroll 15s infinite ease-in-out;
+}
+
+.carousel-slide {
+  width: 33.33%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+/*staff container*/
+
+.staff {
+    margin: 0;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+.staff-container {
+    width: 90%;
+    border-radius: 250px;
+    max-width: 1200px;
+    height: 500px;
+    overflow: hidden; /* Clips the horizontal sliding */
+    position: relative;
+}
+
+.staff-track {
+    display: flex;
+    width: 300%; /* Adjust based on number of slides (e.g., 300% for 3 slides) */
+    height: 100%;
+    animation: slideScroll 12s infinite ease-in-out;
+}
+
+.staff-slide {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+/* The Main Dark Pill */
+.pill-bg {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border-radius: 200px; /* High radius for pill shape */
+    display: flex;
+    align-items: center;
+}
+
+/* The Smaller White Pill Accent */
+.accent-shape {
+    position: absolute;
+    left: 12%;
+    top:70%;
+    width: 250px;
+    height: 80px;
+    background-color: rgba(253, 250, 247, 0); /* Off-white color */
+    border-radius: 50px;
+}
+
+/* The Staff Image (The Man) */
+.staff-img {
+    position: absolute;
+    right: 8%;
+    bottom: 0;
+    height: 110%; /* Makes the image taller than the pill */
+    object-fit: contain;
+    z-index: 2;
+}
+
+/* Text Content */
+.slide-content {
+    position: absolute;
+    left: 40%;
+    color: white;
+    max-width: 300px;
+}
+
+.slide-content h3 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+/* Animation */
+@keyframes slideScroll {
+    0%, 45% { transform: translateX(0%); }
+    55%, 100% { transform: translateX(-50%); }
+}
+
+/*staff container end*/
+
+.slide-content {
+    position: absolute;
+   left: 10%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    padding: 20px 40px;
+    border-radius: 50px;
+    color: #2a5298;
+}
+
+@keyframes slideScroll {
+  0%, 20% { transform: translateX(0); }
+  33%, 53% { transform: translateX(-33.33%); }
+  66%, 86% { transform: translateX(-66.66%); }
+  100% { transform: translateX(0); }
+}
+
+
+.grid-promo{
+  position: relative; /* Required for the pseudo-element positioning */
+  overflow: hidden;   /* Keeps the blurred edges inside the pill shape */
+  width: calc(100% - 30px);
+  max-width: 1200px;
+  height: 350px;
+  border-radius: 50px;
+  padding: 20px 40px;
+  margin: 15px auto;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.124);
+  background-color:rgba(255, 255, 255, 0.124);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+}
+.grid-promo-text{
+    width: 300px;
+    height: 300px;
+    padding: 20px;
+    gap: 30px;
+}
+
+.square {
+    width: 300px;
+    height: 300px;
+    border: 2px solid var(--primary); /* Uses your theme color */
+    border-radius: 15px;    /* Optional: rounded corners */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 10px;
+    overflow: hidden;
+}
+.head {
+    color: #2a5298;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.navbar a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position:static;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 999;
+}
+
+#topBtn {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    background: #23b236;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: 0.3s ease-in-out;
+    z-index: 2001;
+}
+
+#topBtn img { width: 25px; filter: brightness(0) invert(1); }
+#topBtn:hover { background: #1e3c72; transform: scale(1.1); }
+
+
+body{
+    background: linear-gradient(-45deg, #f3e7e9, #e3eeff, #e3ffe7, #fffae3);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    padding-bottom: 120px;
+    margin: 0;
+    font-size: 14px;
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    list-style: none;
+}
+main{
+    width: min(1400px, 100vw);
+    margin: auto;
+    padding: 20px;
+    flex: 1;
+}
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+header img{
+    height: 40px;
+}
+.banner .content{
+    font-family: "Odibee Sans", sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.banner .content h1{
+    font-size: 17em;
+}
+.banner .content .right{
+    text-align: right;
+    transform: translateY(-30px);
+}
+.banner .content .right h2{
+    font-size: 7em;
+    font-weight: 200;
+}
+.banner .image{
+    width: 100%;
+    height: 600px;
+    position: relative;
+    animation: autoShowAnimation both;
+    animation-timeline: view(95% 5%);
+}
+.banner .image img{
+    position: absolute;
+    height: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0px;
+}
+.grid figure img{
+    width: 100%;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(var(--row), 100px);
+    margin-top: 50px;
+    gap: 50px;
+}
+.grid-1 figure:nth-child(1){
+    grid-column: 2 / 6;
+    grid-row: 1;
+}
+.grid-1 figure:nth-child(2){
+    grid-column: 3 / 5;
+    grid-row: 1;
+}
+.grid-1 h2:nth-child(3){
+    font-size: 7em;
+    grid-column: 1 / 7;
+    text-align: center;
+    grid-row: 5;
+    z-index: 1;
+}
+.grid-1{
+    --row: 2;
+}
+.grid-2{
+    --row: 8;
+    font-size: 1.7em;
+}
+.grid-2 div:nth-child(1){
+    grid-column: 1 / 4;
+    grid-row: 3;
+}
+.grid-2 div:nth-child(2){
+    grid-column: 4 / 7;
+    grid-row: 1;
+}
+.grid-2 div:nth-child(3){
+    grid-column: 4 / 7;
+    grid-row: 4;
+}
+.grid-2 div:nth-child(4){
+    grid-column: 1 / 4;
+    grid-row: 6;
+}
+.grid-3{
+    --row: 6;
+    font-size: 10em;
+}
+.grid-3 div{
+    grid-column: 2/ 6;
+    text-wrap: nowrap;
+}
+.grid-3 div:nth-child(even){
+    text-align: right;
+}
+.grid-3 div:nth-child(5){
+    grid-column: 1/ 6;
+}
+.grid-3 div:nth-child(4){
+    grid-column: 1/ 7;
+}
+.footer {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: relative; /* Changed from conflicting static/fixed */
+    margin-top: auto; /* Added for flex sticky footer */
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 999;
+    flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+/* footer begin */
+.footer {
+    background-color: #f9f9f9; /* Light, clean background */
+    padding: 60px 20px 20px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    border-top: 1px solid #eee;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 250px; /* Ensures columns stack on small screens */
+}
+
+.footer-logo {
+    font-size: 1.5rem;
+    color: #2ecc71; /* A "fresh" green color */
+    margin-bottom: 15px;
+}
+
+.footer-section h4 {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+}
+
+.footer-section a {
+    text-decoration: none;
+    color: #666;
+    transition: color 0.3s;
+}
+
+.footer-section a:hover {
+    color: #2ecc71;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-icons a {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    font-size: 0.9rem;
+    color: #888;
+}
+/* The footer .content rule stays the same */
+
+
+
+
+
+
+/* Rest of your existing styles remain unchanged... */
+.grid-5 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Creates 4 equal columns */
+    gap: 40px;
+    font-size: 1.7em;
+    color:white;
+    text-align: justify;
+}
+
+/* Remove the individual row/column overrides or set them to auto */
+.grid-5 div {
+    grid-row: 1; /* Forces everyone into the first row */
+    grid-column: auto; 
+}
+  
+
+
+#topBtn {
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background: #23b236;
+  cursor: pointer;
+  display: none;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: 0.3s ease-in-out;
+  z-index: 2001;
+}
+
+#topBtn img { width: 25px; filter: brightness(0) invert(1); }
+#topBtn:hover { background: #1e3c72; transform: scale(1.1); }
+
+@media screen and (max-width: 1023px){
+    header img{
+        height: 2em;
+    }
+    .banner .content h1{
+        font-size: 12em;
+    }
+    .banner .content .right{
+        transform: none;
+    }
+    .grid-2 div:nth-child(1){
+        grid-row: 2;
+    }
+    .grid-2 div:nth-child(3){
+        grid-row: 6;
+    }
+    .grid-2 div:nth-child(4){
+        grid-row: 5;
+    }
+    .grid-3{
+        font-size: 5em;
+        line-height: 1em;
+    }
+}
+@media screen and (max-width: 1023px){
+    header img{
+        height: unset;
+        width: 100%;
+    }
+    .banner .content h1{
+        font-size: 7em;
+    }
+    .banner .content{
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .banner{
+        overflow: hidden;
+    }
+    .grid-1 h2:nth-child(3){
+        font-size: 3em;
+    }
+    .grid{
+        display: block;
+    }
+    .grid-3{
+        font-size: 4em;
+        display: block;
+        margin-bottom: 100px;
+    }
+}
+
+.autoRotate{
+    animation: autoRotateAnimation;
+    animation-timeline: view();
+}
+#size{ 
+    width: 250px;
+    height: 250px;
+    margin-left: 0;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center; 
+    }
+    
+@keyframes autoRotateAnimation{
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+.autoShow{
+    animation: autoShowAnimation both;
+    animation-timeline: view(70% 5%);
+
+}
+@keyframes autoShowAnimation{
+    from{
+        opacity: 0;
+        transform: translateY(200px) scale(0.3);
+    }to{
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+}
+.autoBLur{
+    animation: autoBLurAnimation linear both;
+    animation-timeline: view();
+}
+@keyframes autoBLurAnimation{
+    0%{
+        filter: blur(40px);
+    }
+    45%, 55%{
+        filter: blur(0px);
+    }
+    100%{
+        filter: blur(40px);
+    }
+}
+  @-webkit-keyframes rotating {
+    from{
+         -webkit-transform: rotate(0deg);
+         }
+     to{
+         -webkit-transform: rotate(360deg);
+         }
+        }
+  /*rotating speed*/
+    .rotating { -webkit-animation: rotating 7s linear infinite;
+        }
+.cart-island {
+  position: fixed;
+  top: 100px;
+  right: 30px;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  pointer-events: none;
+  z-index: 2000;
+  cursor: pointer;
+}
+
+.cart-island.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+.island-count {
+  background: #23b236;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.cart-island.pulse {
+  animation: pulse 0.4s ease-out;
+}

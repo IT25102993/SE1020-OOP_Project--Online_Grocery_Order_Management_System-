@@ -1,94 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
-  <title>FreshMart | Home</title>
-  <link rel="stylesheet" href="css/index.css">
+  <title>FreshMart | Checkout</title>
+  <link rel="stylesheet" href="css/order.css">
+  <style>
+    .checkout-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 30px;
+    }
+
+    .checkout-form h2,
+    .order-summary h2 {
+      margin-bottom: 25px;
+      color: #14284a;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: #23b236;
+    }
+
+    .order-summary {
+      background: #fcfcfc;
+      padding: 20px;
+      border-radius: 15px;
+      border: 1px solid #eee;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .summary-total {
+      border-top: 2px solid #eee;
+      margin-top: 15px;
+      padding-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      font-size: 18px;
+      color: #14284a;
+    }
+
+    .confirm-btn {
+      width: 100%;
+      background: #23b236;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: 0.3s;
+    }
+
+    .confirm-btn:hover {
+      background: #1fa831;
+      transform: scale(1.02);
+    }
+
+    @media (max-width: 768px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header class="navbar">
-  <h1 class="head">FreshMart<span id="admin-badge"></span></h1>
-  <nav>
-    <span id="admin-link-container"></span>
-    <a href="index.html">Home</a>
-    <a href="order.html">Order</a>
-    <a href="login.html" id="auth-link">Log in</a>
-  </nav>
-</header>
-<main>
-  <header>
-    <img src="images/index/5.png" alt="Fresh Produce">
-    <img src="images/index/6.png" width="200px" alt="Daily Essentials">
+  <header class="navbar">
+    <h1 style="color:#14284a">FRESH<span style="color:#1fa831">MART</span></h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="order.html">Shop</a>
+    </nav>
   </header>
-  <section class="banner">
-    <div class="content">
-      <h1 class="left">FRESHNESS</h1>
-      <div class="right">
-        <h2>DELIVERED</h2>
-        <p>Premium Quality</p>
-        <p>Farm-to-table groceries delivered
-          <br>straight to your doorstep.</p>
+
+  <main>
+    <div class="checkout-container">
+      <div class="checkout-form">
+        <h2>Shipping & Payment</h2>
+        <form id="checkout-form">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="full-name" required placeholder="Enter your full name">
+          </div>
+          <div class="form-group">
+            <label>Shipping Address</label>
+            <textarea id="address" rows="3" required placeholder="House No, Street, City"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" id="phone" required placeholder="07XXXXXXXX">
+          </div>
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select id="payment-method">
+              <option value="cod">Cash on Delivery</option>
+              <option value="card">Credit/Debit Card (Demo)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Card No</label>
+            <input type="text" id="card-no" required placeholder="1234-5678-1234-5678">
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Card Holder Name</label>
+            <input type="text" id="card-name" required placeholder="Card Holder Name">
+            </select>
+          </div>
+        </form>
       </div>
-      <div class="image">
-        <img src="images/index/globe 2.png" alt="Global Sourcing">
+
+      <div class="order-summary" id="order-summary">
+        <h2>Order Summary</h2>
+        <div id="summary-items-list">
+          <!-- Items injected by JS -->
+        </div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span>Rs. <span id="summary-total-amount">0</span></span>
+        </div>
+        <button type="submit" form="checkout-form" class="confirm-btn">Confirm Order</button>
       </div>
     </div>
-  </section>
+  </main>
 
+  <footer class="footer">
+    <h2><b>FreshMart</b></h2>
+    <p>Healthy Living</p>
+    <p>&copy; 2026 All Rights Reserved By FreshMart</p>
+  </footer>
 
-  <section class="grid grid-2">
-    <div class="autoShow">
-      <figure>
-        <img src="images/index/6.png" alt="Organic Vegetables">
-      </figure>
-      <p>
-        We partner with local farmers to ensure you get the crispest vegetables and juiciest fruits <br>
-        every single morning. Quality is our top priority, and we hand-pick every item to ensure it meets our "Freshness Guarantee" before it ever reaches your shopping bag.
-      </p>
-    </div>
-    <div class="autoShow">
-      FreshMart isn't just a grocery store; it's a commitment to a healthier lifestyle. We started with a simple mission: to make organic, high-quality food accessible to everyone in the community. <br>
-      Over the years, we've grown from a small local stall to a digital storefront, but our core values remain the same. We handle the logistics so you can focus on cooking delicious, nutritious meals for your family. From pantry staples to exotic imports, we manage our inventory with precision to ensure nothing sits on a shelf longer than it should.
-      Our team works around the clock to pack your orders with care <br>
-      and deliver them in temperature-controlled environments to maintain peak flavor.
-    </div>
-
-    <div class="autoShow">
-      <figure>
-        <img src="images/index/2.png" alt="Dairy and Bakery">
-      </figure>
-      <p>
-        From farm-fresh dairy to artisan bread baked daily, we bring the local market experience <br>
-        right to your screen. No more long queues or heavy lifting—just fresh food fast.
-      </p>
-    </div>
-    <div class="autoShow">
-      <figure>
-        <img src="images/index/candy.png" alt="Snacks and Treats">
-      </figure>
-    </div>
-  </section>
-
-  <section class="grid grid-3">
-    <div class="autoBLur">FRESH FOOD</div>
-    <div class="autoBLur">LOCAL PICK</div>
-    <div class="autoBLur">FAST DELIVERY</div>
-    <div class="autoBLur">JOIN US +</div>
-    <div class="autoBLur">SHOP ALL &#8599;</div>
-  </section>
-</main>
-<footer>
-  <div class="grid grid-5 content">
-    <div><strong>Our Mission:</strong> At FreshMart, we believe that everyone deserves access to healthy, affordable food. We utilize smart management systems to reduce food waste and keep prices low for our customers while supporting sustainable farming practices globally and locally.</div>
-    <div><strong>Shopping Info:</strong> We offer same-day delivery on all orders placed before 10:00 AM. Our flexible subscription service allows you to schedule weekly deliveries of your most-used items like milk, eggs, and bread, ensuring you never run out of the basics.</div>
-    <div><strong>Customer Care:</strong> Have a question about your order or our sourcing? Our 24/7 support team is here to help. We are committed to transparency and provide detailed nutritional information for every product in our catalog. Your satisfaction is our success.</div>
-    <div>
-      <figure>
-        <img src="images/index/8.png" alt="Quality Certified">
-      </figure>
-    </div>
-  </div>
-</footer>
+  <script src="js/checkouts.js"></script>
 </body>
+
+</html>
