@@ -23,6 +23,7 @@ public class CustomerFileService {
         customer.setEmail(dto.getEmail());
         customer.setAddress(dto.getAddress());
         customer.setPassword(dto.getPassword());
+        customer.setProfilePicture(dto.getProfilePicture());
         customerRepository.save(customer);
     }
 
@@ -43,6 +44,7 @@ public class CustomerFileService {
             dto.setEmail(customer.getEmail());
             dto.setAddress(customer.getAddress());
             dto.setPassword(customer.getPassword());
+            dto.setProfilePicture(customer.getProfilePicture());
             return dto;
         }).collect(Collectors.toList());
     }
@@ -52,6 +54,9 @@ public class CustomerFileService {
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
         customer.setName(dto.getName());
         customer.setAddress(dto.getAddress());
+        if (dto.getProfilePicture() != null) {
+            customer.setProfilePicture(dto.getProfilePicture());
+        }
         customerRepository.save(customer);
     }
 }

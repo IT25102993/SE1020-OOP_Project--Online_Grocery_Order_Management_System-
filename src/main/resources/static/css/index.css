@@ -38,6 +38,7 @@ body::before {
     top: 0;
     z-index: 1000;
 }
+
 .topBar{
   padding: 10px 25px;
   margin: 15px;

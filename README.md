@@ -1,4 +1,4 @@
-# FreshMart - Online Grocery Management
+# FreshMart - Online Grocery Management | OOP PROJECT
 
 Java Spring Boot + HTML/CSS/JavaScript. Admin and customer accounts stored in **text files**; products and product quantity in **MySQL** (XAMPP).
 

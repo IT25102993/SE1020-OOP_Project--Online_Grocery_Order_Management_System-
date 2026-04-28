@@ -4,6 +4,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const addressInput = document.getElementById('profile-address');
     const profileForm = document.getElementById('profile-form');
     const message = document.getElementById('profile-message');
+    
+    const displayName = document.getElementById('display-name');
+    const displayEmail = document.getElementById('display-email');
+    const profileImg = document.getElementById('profile-img');
+    const avatarContainer = document.getElementById('avatar-container');
+    const profileUpload = document.getElementById('profile-upload');
 
     const currentUserEmail = sessionStorage.getItem('loggedInUser');
     if (!currentUserEmail) {
@@ -20,20 +26,71 @@ document.addEventListener('DOMContentLoaded', async () => {
     let countdownInterval = null;
 
     // Load current data
-    try {
-        const res = await fetch('/api/auth/customer/all');
-        const customers = await res.json();
-        const user = customers.find(c => c.email === currentUserEmail);
-        
-        if (user) {
-            emailInput.value = user.email;
-            nameInput.value = user.name || '';
-            addressInput.value = user.address || '';
+    async function fetchUserData() {
+        try {
+            const res = await fetch('/api/auth/customer/all');
+            const customers = await res.json();
+            const user = customers.find(c => c.email.toLowerCase() === currentUserEmail.toLowerCase());
+            
+            if (user) {
+                emailInput.value = user.email;
+                nameInput.value = user.name || '';
+                addressInput.value = user.address || '';
+                displayName.textContent = user.name || 'User';
+                displayEmail.textContent = user.email;
+                
+                if (user.profilePicture) {
+                    profileImg.src = user.profilePicture;
+                } else {
+                    profileImg.src = 'images/profile_avatar.png';
+                }
+            }
+        } catch (err) {
+            console.error("User data fetch error:", err);
         }
-    } catch (err) {
-        console.error(err);
     }
 
+    await fetchUserData();
+
+    // --- Profile Picture Upload ---
+    avatarContainer.addEventListener('click', () => {
+        profileUpload.click();
+    });
+
+    profileUpload.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('email', currentUserEmail);
+        formData.append('image', file);
+
+        try {
+            message.textContent = 'Uploading picture...';
+            message.style.color = '#2a5298';
+
+            const res = await fetch('/api/customer/upload-profile-pic', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                profileImg.src = result.imagePath + '?t=' + new Date().getTime();
+                message.textContent = 'Profile picture updated!';
+                message.style.color = '#1fa831';
+            } else {
+                message.textContent = result.message || 'Upload failed.';
+                message.style.color = '#ff4d4d';
+            }
+        } catch (err) {
+            console.error("Upload error:", err);
+            message.textContent = 'Network error during upload.';
+            message.style.color = '#ff4d4d';
+        }
+    });
+
+    // --- Verification Code Logic ---
     if (btnSendCode) {
         btnSendCode.addEventListener('click', async () => {
             btnSendCode.disabled = true;
@@ -115,7 +172,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const result = await res.json();
             if (result.success) {
-                message.style.color = '#89ec8e';
+                message.style.color = '#1fa831';
                 message.innerText = 'Profile updated successfully!';
                 verificationWrap.style.display = 'none';
                 btnSendCode.style.display = 'block';
@@ -124,6 +181,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btnSave.style.display = 'none';
                 if (countdownInterval) clearInterval(countdownInterval);
                 timerDisplay.textContent = '';
+                
+                displayName.textContent = updateData.name;
             } else {
                 message.style.color = '#ff4d4d';
                 message.innerText = result.message || 'Update failed.';
@@ -133,6 +192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             message.innerText = 'Server error.';
         }
     });
+
     // --- Order History Logic ---
     const ordersList = document.getElementById('orders-list');
 
@@ -159,64 +219,72 @@ document.addEventListener('DOMContentLoaded', async () => {
             const orders = await res.json();
 
             if (orders.length === 0) {
-                ordersList.innerHTML = '<p style="opacity: 0.6;">You have no orders yet.</p>';
+                ordersList.innerHTML = '<p style="opacity: 0.6; text-align: center; padding: 20px;">You have no orders yet.</p>';
                 return;
             }
+
+            // Keep track of which orders were expanded
+            const expandedOrders = new Set();
+            document.querySelectorAll('.order-card.active').forEach(card => {
+                expandedOrders.add(card.dataset.orderId);
+            });
 
             ordersList.innerHTML = '';
             orders.forEach(order => {
                 const currentStep = statusMap[order.status] || 0;
                 const orderDate = new Date(order.orderDate).toLocaleString();
+                const isExpanded = expandedOrders.has(order.id.toString());
                 
                 let driverSection = '';
                 if (order.driver) {
                     driverSection = `
-                        <div class="driver-info">
-                            <span class="driver-icon">🚚</span>
-                            <div>
-                                <strong>Driver Assigned: ${order.driver.name}</strong><br>
-                                <small>Phone: ${order.driver.phone} | Vehicle: ${order.driver.vehicle} (${order.driver.vehicleNo})</small>
+                        <div class="driver-box">
+                            <i class='bx bxs-truck'></i>
+                            <div class="driver-info">
+                                <h5>Driver Assigned: ${order.driver.name}</h5>
+                                <p>Phone: ${order.driver.phone} | Vehicle: ${order.driver.vehicle} (${order.driver.vehicleNo})</p>
                             </div>
                         </div>
                     `;
                 }
 
                 const orderCard = document.createElement('div');
-                orderCard.className = 'order-card';
+                orderCard.className = `order-card ${isExpanded ? 'active' : ''}`;
+                orderCard.dataset.orderId = order.id;
                 orderCard.innerHTML = `
-                    <div class="order-header">
-                        <div>
-                            <strong>Order #${order.id}</strong><br>
-                            <small style="opacity:0.7">${orderDate}</small>
+                    <div class="order-header" onclick="this.parentElement.classList.toggle('active')">
+                        <div class="order-info">
+                            <h4>Order #${order.id}</h4>
+                            <span>Ordered on ${orderDate}</span>
                         </div>
-                        <div style="text-align: right;">
-                            <strong style="color: #89ec8e;">Rs. ${order.totalAmount.toFixed(2)}</strong><br>
-                            <small>${order.status}</small>
+                        <div class="order-amount">
+                            <strong>Rs. ${order.totalAmount.toFixed(2)}</strong>
+                            <i class='bx bx-chevron-down toggle-icon'></i>
                         </div>
                     </div>
 
-                    <div class="order-status-track">
-                        ${statusLabels.map((label, index) => `
-                            <div class="status-step ${index <= currentStep ? 'active' : ''} ${index === currentStep && order.status !== 'COMPLETED' ? 'playback-animation' : ''}">
-                                ${index + 1}
-                                <span class="status-label">${label}</span>
-                            </div>
-                        `).join('')}
-                    </div>
+                    <div class="order-details">
+                        <div class="status-track">
+                            ${statusLabels.map((label, index) => `
+                                <div class="step ${index <= currentStep ? 'active' : ''}">
+                                    ${index + 1}
+                                    <span class="label">${label}</span>
+                                </div>
+                            `).join('')}
+                        </div>
 
-                    ${driverSection}
+                        ${driverSection}
 
-                    <div style="margin-top: 25px; font-size: 0.9em;">
-                        <strong style="display: block; margin-bottom: 10px; color: #2a5298;">Ordered Items:</strong>
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <div class="items-list">
+                            <h5>Ordered Items</h5>
                             ${order.items.map(item => `
-                                <div style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px;">
-                                    <img src="${item.product.imagePath || ''}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 8px; background: #333;">
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: bold; color: #fff;">${item.product.name}</div>
-                                        <div style="font-size: 0.8em; opacity: 0.7;">Rs. ${item.price.toFixed(2)} each</div>
+                                <div class="item-row">
+                                    <img src="${item.product.imagePath || 'images/default-product.png'}">
+                                    <div class="item-info">
+                                        <h6>${item.product.name}</h6>
+                                        <span>Rs. ${item.price.toFixed(2)} each</span>
                                     </div>
-                                    <div style="font-weight: bold; color: #89ec8e;">x${item.quantity}</div>
+                                    <div class="item-qty">x${item.quantity}</div>
                                 </div>
                             `).join('')}
                         </div>
@@ -226,7 +294,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         } catch (err) {
             console.error("Orders load error:", err);
-            ordersList.innerHTML = '<p style="color: #ff4d4d;">Failed to load orders.</p>';
+            ordersList.innerHTML = '<p style="color: #ff4d4d; text-align: center;">Failed to load orders.</p>';
         }
     }
 

@@ -243,7 +243,7 @@ async function loadProducts() {
         <img src="${imgSrc || placeholder}" alt="${p.name}" onerror="this.src='${placeholder}'">
         <small style="color:gray;">ID: ${p.productId}</small>
         <h3>${p.name}</h3>
-        <p>Rs. ${p.price != null ? p.price : 0}</p>
+        <p>Rs. ${(p.price != null ? p.price : 0).toFixed(2)}</p>
         <button onclick="addToCart(this, '${p.name.replace(/'/g, "\\'")}', ${p.price != null ? p.price : 0}, '${p.productId}')">Add to Cart</button>
       `;
       productGrid.appendChild(card);

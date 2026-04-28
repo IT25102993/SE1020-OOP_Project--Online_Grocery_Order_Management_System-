@@ -8,7 +8,37 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch('/api/orders/drivers');
             drivers = await res.json();
+            renderDrivers(); // Always try to render if list exists
         } catch (err) { console.error("Drivers load error:", err); }
+    }
+
+    function renderDrivers() {
+        const driverList = document.getElementById('driver-list');
+        if (!driverList) return;
+
+        if (drivers.length === 0) {
+            driverList.innerHTML = '<p style="color: #666;">No drivers registered yet.</p>';
+            return;
+        }
+
+        driverList.innerHTML = '';
+        drivers.forEach(d => {
+            const card = document.createElement('div');
+            card.style.cssText = 'background: white; padding: 15px; border-radius: 10px; border-left: 5px solid #23b236; box-shadow: 0 2px 5px rgba(0,0,0,0.05);';
+            card.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <i class='bx bxs-user-circle' style="font-size: 40px; color: #2a5298;"></i>
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0; color: #14284a;">${d.name}</h4>
+                        <p style="margin: 5px 0 0; font-size: 13px; color: #666;">
+                            <i class='bx bxs-phone' style="font-size: 12px;"></i> ${d.phone}<br>
+                            <i class='bx bxs-truck' style="font-size: 12px;"></i> ${d.vehicle} (${d.vehicleNo})
+                        </p>
+                    </div>
+                </div>
+            `;
+            driverList.appendChild(card);
+        });
     }
 
     if (addDriverBtn) {
@@ -111,14 +141,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
                 }
 
+                const currentStep = statusFlow.indexOf(order.status);
+                const statusLabels = [
+                    'Order Requested',
+                    'Processed',
+                    'Delivery Started',
+                    'Arrived',
+                    'Completed'
+                ];
+
                 card.innerHTML = `
-                    <div class="order-header">
-                        <div>
+                    <div class="order-header" style="${order.status === 'COMPLETED' ? 'justify-content: center; flex-direction: column; text-align: center;' : ''}">
+                        <div style="${order.status === 'COMPLETED' ? 'margin-bottom: 15px;' : ''}">
                             <strong>Order #${order.id}</strong> | <span>${order.customer.name} (${order.customer.email})</span><br>
                             <small>${new Date(order.orderDate).toLocaleString()}</small>
                         </div>
-                        <span class="status-badge status-${order.status}">${order.status}</span>
+                        <span class="status-badge status-${order.status}" style="${order.status === 'COMPLETED' ? 'font-size: 1.2em; padding: 8px 20px;' : ''}">${order.status}</span>
                     </div>
+
+                    <div class="status-track" style="margin-top: 20px; margin-bottom: 30px;">
+                        ${statusLabels.map((label, index) => `
+                            <div class="step ${index <= currentStep ? 'active' : ''}">
+                                ${index + 1}
+                                <span class="label">${label}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
                     <div style="font-size: 0.9em; margin-bottom: 10px;">
                         <strong>Items:</strong>
                         <div style="margin-top: 5px; background: white; padding: 10px; border-radius: 8px; border: 1px solid #eee;">

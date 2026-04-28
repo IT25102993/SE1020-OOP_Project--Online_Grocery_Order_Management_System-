@@ -56,17 +56,63 @@
             font-weight: 500;
         }
         .admin-btn.secondary { background: #2a5298; }
+        /* Status Tracking */
+        .status-track {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0 50px;
+            position: relative;
+            padding: 0 10px;
+        }
+        .status-track::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 40px;
+            right: 40px;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        .step {
+            width: 32px;
+            height: 32px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            transition: 0.5s;
+        }
+        .step.active {
+            background: #23b236;
+            box-shadow: 0 0 12px rgba(35, 178, 54, 0.4);
+        }
+        .step .label {
+            position: absolute;
+            top: 40px;
+            font-size: 10px;
+            white-space: nowrap;
+            color: #888;
+            left: 50%;
+            transform: translateX(-50%);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .step.active .label {
+            color: #23b236;
+            font-weight: bold;
+        }
         .driver-select {
             padding: 5px 10px;
             border-radius: 8px;
             border: 1px solid #ddd;
             font-size: 13px;
-        }
-        .driver-form {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
         }
     </style>
 </head>
@@ -98,17 +144,6 @@
     </nav>
 
     <div class="home-content">
-        <div class="driver-form">
-            <h3>Add New Driver</h3>
-            <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
-                <input type="text" id="driver-name" placeholder="Driver Name" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; flex: 1;">
-                <input type="text" id="driver-phone" placeholder="Phone Number" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; flex: 1;">
-                <input type="text" id="driver-vehicle" placeholder="Vehicle (e.g. Bike)" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; flex: 1;">
-                <input type="text" id="driver-vehicle-no" placeholder="Vehicle No" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; flex: 1;">
-                <button class="admin-btn" id="add-driver-btn">Register Driver</button>
-            </div>
-        </div>
-
         <div class="orders-section">
             <h2 style="margin-bottom: 20px;">Customer Orders</h2>
             <div id="admin-orders-list">
