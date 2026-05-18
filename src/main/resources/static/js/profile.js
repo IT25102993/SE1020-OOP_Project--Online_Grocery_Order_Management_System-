@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    let originalName = '';
+    let originalAddress = '';
+    let originalMembership = '';
+    let hasPaidPremium = false;
+
     const verificationWrap = document.getElementById('verification-wrap');
     const profileCodeInput = document.getElementById('profile-code');
     const btnSendCode = document.getElementById('btn-send-code');
@@ -38,6 +43,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 addressInput.value = user.address || '';
                 displayName.textContent = user.name || 'User';
                 displayEmail.textContent = user.email;
+                
+                originalName = user.name || '';
+                originalAddress = user.address || '';
+                originalMembership = user.customerType || 'REGULAR';
                 
                 if (user.profilePicture) {
                     profileImg.src = user.profilePicture;
@@ -59,6 +68,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                     if (membershipSelect) membershipSelect.value = 'REGULAR';
                 }
+                
+                checkEdits();
             }
         } catch (err) {
             console.error("User data fetch error:", err);
@@ -104,6 +115,159 @@ document.addEventListener('DOMContentLoaded', async () => {
             message.style.color = '#ff4d4d';
         }
     });
+
+    // --- Edit checks & Premium Upgrade Flow ---
+    function checkEdits() {
+        const nameChanged = nameInput.value !== originalName;
+        const addressChanged = addressInput.value !== originalAddress;
+        const membershipChanged = membershipSelect.value !== originalMembership;
+
+        if (verificationWrap.style.display === 'block') {
+            btnSendCode.style.display = 'none';
+        } else if (nameChanged || addressChanged || membershipChanged) {
+            btnSendCode.style.display = 'block';
+        } else {
+            btnSendCode.style.display = 'none';
+        }
+    }
+
+    nameInput.addEventListener('input', checkEdits);
+    addressInput.addEventListener('input', checkEdits);
+    
+    if (membershipSelect) {
+        membershipSelect.addEventListener('change', (e) => {
+            const selectedValue = e.target.value;
+            if (selectedValue === 'PREMIUM' && originalMembership !== 'PREMIUM' && !hasPaidPremium) {
+                openPaymentModal();
+            } else {
+                checkEdits();
+            }
+        });
+    }
+
+    // Modal elements
+    const paymentModal = document.getElementById('payment-modal');
+    const paymentForm = document.getElementById('payment-form');
+    const btnClosePayment = document.getElementById('btn-close-payment');
+    const payStatus = document.getElementById('payment-status-message');
+
+    const cardNameInput = document.getElementById('card-name');
+    const cardNumberInput = document.getElementById('card-number');
+    const cardExpiryInput = document.getElementById('card-expiry');
+    const cardCvvInput = document.getElementById('card-cvv');
+
+    const previewName = document.getElementById('preview-card-name');
+    const previewNumber = document.getElementById('preview-card-number');
+    const previewExpiry = document.getElementById('preview-card-expiry');
+
+    function openPaymentModal() {
+        paymentModal.style.display = 'flex';
+        payStatus.innerHTML = '';
+        paymentForm.style.display = 'block';
+        
+        cardNameInput.value = '';
+        cardNumberInput.value = '';
+        cardExpiryInput.value = '';
+        cardCvvInput.value = '';
+        
+        previewName.textContent = 'CARDHOLDER NAME';
+        previewNumber.textContent = '•••• •••• •••• ••••';
+        previewExpiry.textContent = 'MM/YY';
+    }
+
+    function closePaymentModal() {
+        paymentModal.style.display = 'none';
+        if (!hasPaidPremium) {
+            membershipSelect.value = originalMembership;
+        }
+        checkEdits();
+    }
+
+    if (btnClosePayment) {
+        btnClosePayment.addEventListener('click', closePaymentModal);
+    }
+
+    if (cardNameInput) {
+        cardNameInput.addEventListener('input', (e) => {
+            previewName.textContent = e.target.value.toUpperCase() || 'CARDHOLDER NAME';
+        });
+    }
+
+    if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            let formatted = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formatted += ' ';
+                }
+                formatted += value[i];
+            }
+            e.target.value = formatted;
+            previewNumber.textContent = formatted || '•••• •••• •••• ••••';
+        });
+    }
+
+    if (cardExpiryInput) {
+        cardExpiryInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 2) {
+                e.target.value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            } else {
+                e.target.value = value;
+            }
+            previewExpiry.textContent = e.target.value || 'MM/YY';
+        });
+    }
+
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const nameVal = cardNameInput.value.trim();
+            const numVal = cardNumberInput.value.replace(/\s/g, '');
+            const expVal = cardExpiryInput.value.trim();
+            const cvvVal = cardCvvInput.value.trim();
+
+            if (!nameVal || numVal.length < 16 || expVal.length < 5 || cvvVal.length < 3) {
+                payStatus.style.color = '#ff4d4d';
+                payStatus.textContent = 'Please enter valid credit card details.';
+                return;
+            }
+
+            paymentForm.style.display = 'none';
+            payStatus.style.color = '#1fa831';
+            payStatus.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <i class='bx bx-loader-alt bx-spin' style='font-size: 3em; color: #e5a900;'></i>
+                    <p style="margin-top: 15px; font-weight: 600; color: #14284a;">Processing Card Payment...</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                hasPaidPremium = true;
+                payStatus.innerHTML = `
+                    <div style="text-align: center; padding: 10px;">
+                        <div class="success-checkmark">
+                            <div class="check-icon">
+                                <span class="icon-line line-tip"></span>
+                                <span class="icon-line line-long"></span>
+                            </div>
+                        </div>
+                        <h4 style="color: #1fa831; margin-top: 15px; font-weight: bold;">Rs. 1,500.00 Paid Successfully!</h4>
+                        <p style="color: #666; font-size: 0.9em; margin-top: 5px;">Your FreshMart premium upgrade is unlocked.</p>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    paymentModal.style.display = 'none';
+                    membershipSelect.value = 'PREMIUM';
+                    checkEdits();
+                }, 2500);
+
+            }, 2000);
+        });
+    }
 
     // --- Verification Code Logic ---
     if (btnSendCode) {
@@ -191,12 +355,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                 message.style.color = '#1fa831';
                 message.innerText = 'Profile updated successfully!';
                 verificationWrap.style.display = 'none';
-                btnSendCode.style.display = 'block';
+                
+                // Hide Send OTP button because changes are successfully saved
+                btnSendCode.style.display = 'none';
                 btnSendCode.disabled = false;
                 btnSendCode.innerText = 'Send Verification Code';
                 btnSave.style.display = 'none';
                 if (countdownInterval) clearInterval(countdownInterval);
                 timerDisplay.textContent = '';
+                
+                // Save new values as original baseline references
+                originalName = updateData.name;
+                originalAddress = updateData.address;
+                originalMembership = updateData.customerType;
+                hasPaidPremium = false;
                 
                 displayName.textContent = updateData.name;
 

@@ -496,29 +496,384 @@ body::before {
     }
 }
 
-/* Membership Badges */
+/* Membership Badges with Premium Glowing Pulse and Shine */
 .badge-silver {
-    background: #e0e0e0;
-    color: #555;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.85em;
-    font-weight: 600;
+    background: linear-gradient(135deg, #e6e9f0 0%, #cbd5e0 100%);
+    color: #4a5568;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 0.9em;
+    font-weight: 800;
     display: inline-block;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    border: 1px solid #ccc;
+    box-shadow: 0 0 15px rgba(200, 200, 200, 0.5);
+    border: 1px solid #cbd5e0;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    animation: silverPulse 2s infinite alternate;
 }
 
 .badge-gold {
-    background: linear-gradient(135deg, #ffd700, #ffa500);
+    background: linear-gradient(135deg, #ffe259 0%, #ffa751 100%);
     color: #14284a;
-    padding: 6px 16px;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 0.9em;
+    font-weight: 800;
+    display: inline-block;
+    box-shadow: 0 0 20px rgba(255, 167, 81, 0.6);
+    border: 1px solid #ffd700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    animation: goldPulse 2s infinite alternate;
+}
+
+.badge-silver::after, .badge-gold::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.7) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: skewX(-25deg);
+    animation: shineSweep 2.5s infinite ease-in-out;
+    z-index: 2;
+}
+
+@keyframes shineSweep {
+    0% { left: -150%; }
+    40% { left: 150%; }
+    100% { left: 150%; }
+}
+
+@keyframes goldPulse {
+    0% {
+        box-shadow: 0 0 15px rgba(255, 167, 81, 0.4), inset 0 0 8px rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 28px rgba(255, 215, 0, 0.9), inset 0 0 12px rgba(255, 255, 255, 0.4);
+        transform: scale(1.02);
+    }
+}
+
+@keyframes silverPulse {
+    0% {
+        box-shadow: 0 0 12px rgba(200, 200, 200, 0.3), inset 0 0 5px rgba(255, 255, 255, 0.2);
+    }
+    100% {
+        box-shadow: 0 0 22px rgba(226, 235, 240, 0.8), inset 0 0 8px rgba(255, 255, 255, 0.4);
+        transform: scale(1.02);
+    }
+}
+
+/* Glassmorphic Payment Modal Backdrop */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 20, 40, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Glassmorphic Modal Content */
+.modal-content {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 
+                inset 0 0 20px rgba(255, 255, 255, 0.5);
     border-radius: 20px;
+    width: 90%;
+    max-width: 480px;
+    padding: 35px;
+    position: relative;
+    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    font-size: 24px;
+    color: #4a5568;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 77, 77, 0.1);
+    color: #ff4d4d;
+    transform: rotate(90deg);
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.modal-header h3 {
+    font-size: 1.6em;
+    color: #14284a;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.text-gold {
+    background: linear-gradient(135deg, #e5a900, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+/* Premium Credit Card Mockup */
+.credit-card-preview {
+    background: linear-gradient(135deg, #14284a 0%, #1e3c72 50%, #2a5298 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(20, 40, 74, 0.35);
+    margin-bottom: 25px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.card-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.15) 0%, rgba(255,255,255,0) 70%);
+    pointer-events: none;
+}
+
+.card-chip {
+    width: 38px;
+    height: 30px;
+    background: linear-gradient(135deg, #fce074, #f4c015);
+    border-radius: 6px;
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.4);
+}
+
+.card-brand {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 2.2em;
+    opacity: 0.9;
+}
+
+.card-number-display {
+    font-size: 1.3em;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    letter-spacing: 2.5px;
+    margin: 15px 0 10px;
+    text-align: center;
+    text-shadow: 1px 2px 3px rgba(0,0,0,0.3);
+}
+
+.card-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.card-holder-display label,
+.card-expiry-display label {
+    font-size: 8px;
+    opacity: 0.7;
+    margin-bottom: 2px;
+    display: block;
+}
+
+.card-holder-display div {
+    font-size: 0.8em;
+    font-weight: 600;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-expiry-display div {
     font-size: 0.85em;
     font-weight: bold;
-    display: inline-block;
-    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
-    border: 1px solid #e5a900;
+}
+
+/* Card Payment Inputs */
+.form-group-pay {
+    margin-bottom: 15px;
+}
+
+.form-group-pay label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 0.8em;
+    color: #4a5568;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group-pay input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 0.95em;
+    transition: 0.3s;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.form-group-pay input:focus {
+    border-color: #e5a900;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(229, 169, 0, 0.15);
+}
+
+.form-row-half {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row-half .form-group-pay {
+    flex: 1;
+}
+
+.btn-pay-now {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #1fa831 0%, #178a26 100%);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(31, 168, 49, 0.3);
+    margin-top: 10px;
+}
+
+.btn-pay-now:hover {
+    background: linear-gradient(135deg, #178a26 0%, #11681b 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(31, 168, 49, 0.45);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Success Checkmark Animation */
+.success-checkmark {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    display: block;
+}
+
+.success-checkmark .check-icon {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    border-radius: 50%;
+    box-sizing: content-box;
+    border: 4px solid #4CAF50;
+}
+
+.success-checkmark .check-icon::before,
+.success-checkmark .check-icon::after {
+    content: '';
+    height: 100px;
+    position: absolute;
+    background: transparent;
+    transform: rotate(-45deg);
+}
+
+.success-checkmark .check-icon .icon-line {
+    height: 5px;
+    background-color: #4CAF50;
+    display: block;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 10;
+}
+
+.success-checkmark .check-icon .icon-line.line-tip {
+    top: 46px;
+    left: 14px;
+    width: 25px;
+    transform: rotate(45deg);
+    animation: icon-line-tip 0.75s;
+}
+
+.success-checkmark .check-icon .icon-line.line-long {
+    top: 38px;
+    right: 8px;
+    width: 47px;
+    transform: rotate(-45deg);
+    animation: icon-line-long 0.75s;
+}
+
+@keyframes icon-line-tip {
+    0% { width: 0; left: 1px; top: 19px; }
+    54% { width: 0; left: 1px; top: 19px; }
+    70% { width: 50px; left: -8px; top: 37px; }
+    84% { width: 17px; left: 21px; top: 48px; }
+    100% { width: 25px; left: 14px; top: 46px; }
+}
+
+@keyframes icon-line-long {
+    0% { width: 0; right: 46px; top: 54px; }
+    65% { width: 0; right: 46px; top: 54px; }
+    84% { width: 55px; right: 0px; top: 35px; }
+    100% { width: 47px; right: 8px; top: 38px; }
 }

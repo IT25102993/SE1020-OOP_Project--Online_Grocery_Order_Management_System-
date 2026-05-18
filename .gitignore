@@ -1,0 +1,36 @@
+# Maven build output - includes generated-sources, classes, JARs, etc.
+target/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Spring Boot fat jars
+*.jar
+*.war
+
+# Logs
+*.log
+logs/
+
+# Environment / Secrets (DO NOT commit)
+application-local.properties
+*.env
