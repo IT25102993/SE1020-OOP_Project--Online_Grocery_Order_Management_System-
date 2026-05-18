@@ -1,6 +1,5 @@
 package com.freshmart.controller;
 
-import com.freshmart.entity.ProductQuantity;
 import com.freshmart.service.ProductQuantityService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
