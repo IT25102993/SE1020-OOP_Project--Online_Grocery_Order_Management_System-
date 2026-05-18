@@ -1,6 +1,5 @@
 package com.freshmart.controller;
 
-import com.freshmart.dto.OrderItemRequest;
 import com.freshmart.dto.OrderRequest;
 import com.freshmart.entity.*;
 import com.freshmart.repository.CustomerRepository;
