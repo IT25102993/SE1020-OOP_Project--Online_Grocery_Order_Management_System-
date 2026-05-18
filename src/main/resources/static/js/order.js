@@ -17,7 +17,7 @@ async function getCartForCurrentUser() {
   }));
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const authLink = document.getElementById('auth-link');
   const adminContainer = document.getElementById('admin-link-container');
   const adminBadge = document.getElementById('admin-badge');
@@ -55,37 +55,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Modified updateIsland to handle guest/login logic
   // forcedShow is true when we explicitly want the island to appear (e.g. after adding an item)
-  window.updateIsland = async function(forcedShow = false) {
+  window.updateIsland = async function (forcedShow = false) {
     const currentUser = sessionStorage.getItem('loggedInUser');
     let cart = [];
-    
+
     try {
       cart = await getCartForCurrentUser();
     } catch (error) {
       console.error("Cart count load error:", error);
       cart = [];
     }
-    
+
     const count = cart.reduce((acc, item) => acc + item.quantity, 0);
     const island = document.getElementById("cart-island");
     const islandCount = document.getElementById("island-count");
 
     if (islandCount) islandCount.innerText = count;
-    
+
     // Visibility Rule: 
     // - Guests: show if count > 0 (always)
     // - Members: show ONLY if just added (forcedShow) or if island is already active
     if (count > 0 && island) {
-        if (!currentUser || forcedShow || island.classList.contains('active')) {
-            island.classList.add("active");
-        }
-        
-        if (!currentIslandItemId && cart.length > 0) {
-            const lastItem = cart[cart.length - 1];
-            currentIslandItemId = lastItem.id;
-            if (islandItemName) islandItemName.innerText = lastItem.name;
-            if (islandQtyInput) islandQtyInput.value = lastItem.quantity;
-        }
+      if (!currentUser || forcedShow || island.classList.contains('active')) {
+        island.classList.add("active");
+      }
+
+      if (!currentIslandItemId && cart.length > 0) {
+        const lastItem = cart[cart.length - 1];
+        currentIslandItemId = lastItem.id;
+        if (islandItemName) islandItemName.innerText = lastItem.name;
+        if (islandQtyInput) islandQtyInput.value = lastItem.quantity;
+      }
     } else if (island) {
       island.classList.remove("active");
       island.classList.remove("expanded");
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Re-defining global addToCart to handle both UI and Island
   window.addToCart = async function (button, name, price, id) {
     const currentUser = sessionStorage.getItem('loggedInUser');
-    
+
     let cart = [];
     try {
       cart = await getCartForCurrentUser();
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       cart.push({ id, name, price: parseFloat(price), quantity: 1 });
     }
-    
+
     if (currentUser) {
       try {
         const response = await fetch('/api/cart/add', {
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
       sessionStorage.setItem('sessionCart', JSON.stringify(cart));
     }
-    
+
     updateIsland(true); // Forced show on addition
 
     // Update Island Expanded Info
@@ -156,16 +156,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Button Feedback
     if (button) {
-        const originalText = button.innerText;
-        button.innerText = "Added ✓";
-        button.style.background = "#23b236";
-        button.disabled = true;
+      const originalText = button.innerText;
+      button.innerText = "Added ✓";
+      button.style.background = "#23b236";
+      button.disabled = true;
 
-        setTimeout(() => {
-          button.innerText = originalText;
-          button.style.background = "#2a5298";
-          button.disabled = false;
-        }, 800);
+      setTimeout(() => {
+        button.innerText = originalText;
+        button.style.background = "#2a5298";
+        button.disabled = false;
+      }, 800);
     }
   };
 
@@ -179,85 +179,85 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (qtyMinus) {
     qtyMinus.addEventListener("click", async (e) => {
-        e.stopPropagation();
-        if (!currentIslandItemId) return;
-        const currentUser = sessionStorage.getItem('loggedInUser');
-        let cart = await getCartForCurrentUser();
-        
-        const itemIndex = cart.findIndex(item => item.id === currentIslandItemId);
-        if (itemIndex > -1 && cart[itemIndex].quantity > 1) {
-            cart[itemIndex].quantity--;
-            if (currentUser) {
-              await fetch('/api/cart/update', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  customerEmail: currentUser,
-                  productId: currentIslandItemId,
-                  quantity: cart[itemIndex].quantity
-                })
-              });
-            } else {
-              sessionStorage.setItem('sessionCart', JSON.stringify(cart));
-            }
-            islandQtyInput.value = cart[itemIndex].quantity;
-            updateIsland(true);
-        } else if (itemIndex > -1 && cart[itemIndex].quantity === 1) {
-            cart.splice(itemIndex, 1);
-            if (currentUser) {
-              const params = new URLSearchParams({
-                customerEmail: currentUser,
-                productId: currentIslandItemId
-              });
-              await fetch(`/api/cart/remove?${params.toString()}`, { method: 'DELETE' });
-            } else {
-              sessionStorage.setItem('sessionCart', JSON.stringify(cart));
-            }
-            island.classList.remove("expanded");
-            updateIsland(true);
+      e.stopPropagation();
+      if (!currentIslandItemId) return;
+      const currentUser = sessionStorage.getItem('loggedInUser');
+      let cart = await getCartForCurrentUser();
+
+      const itemIndex = cart.findIndex(item => item.id === currentIslandItemId);
+      if (itemIndex > -1 && cart[itemIndex].quantity > 1) {
+        cart[itemIndex].quantity--;
+        if (currentUser) {
+          await fetch('/api/cart/update', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              customerEmail: currentUser,
+              productId: currentIslandItemId,
+              quantity: cart[itemIndex].quantity
+            })
+          });
+        } else {
+          sessionStorage.setItem('sessionCart', JSON.stringify(cart));
         }
+        islandQtyInput.value = cart[itemIndex].quantity;
+        updateIsland(true);
+      } else if (itemIndex > -1 && cart[itemIndex].quantity === 1) {
+        cart.splice(itemIndex, 1);
+        if (currentUser) {
+          const params = new URLSearchParams({
+            customerEmail: currentUser,
+            productId: currentIslandItemId
+          });
+          await fetch(`/api/cart/remove?${params.toString()}`, { method: 'DELETE' });
+        } else {
+          sessionStorage.setItem('sessionCart', JSON.stringify(cart));
+        }
+        island.classList.remove("expanded");
+        updateIsland(true);
+      }
     });
   }
 
   if (qtyPlus) {
     qtyPlus.addEventListener("click", async (e) => {
-        e.stopPropagation();
-        if (!currentIslandItemId) return;
-        const currentUser = sessionStorage.getItem('loggedInUser');
-        let cart = await getCartForCurrentUser();
+      e.stopPropagation();
+      if (!currentIslandItemId) return;
+      const currentUser = sessionStorage.getItem('loggedInUser');
+      let cart = await getCartForCurrentUser();
 
-        const itemIndex = cart.findIndex(item => item.id === currentIslandItemId);
-        if (itemIndex > -1) {
-            cart[itemIndex].quantity++;
-            if (currentUser) {
-              await fetch('/api/cart/update', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  customerEmail: currentUser,
-                  productId: currentIslandItemId,
-                  quantity: cart[itemIndex].quantity
-                })
-              });
-            } else {
-              sessionStorage.setItem('sessionCart', JSON.stringify(cart));
-            }
-            islandQtyInput.value = cart[itemIndex].quantity;
-            updateIsland(true);
+      const itemIndex = cart.findIndex(item => item.id === currentIslandItemId);
+      if (itemIndex > -1) {
+        cart[itemIndex].quantity++;
+        if (currentUser) {
+          await fetch('/api/cart/update', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              customerEmail: currentUser,
+              productId: currentIslandItemId,
+              quantity: cart[itemIndex].quantity
+            })
+          });
+        } else {
+          sessionStorage.setItem('sessionCart', JSON.stringify(cart));
         }
+        islandQtyInput.value = cart[itemIndex].quantity;
+        updateIsland(true);
+      }
     });
   }
 
   if (islandBuyBtn) {
     islandBuyBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const currentUser = sessionStorage.getItem('loggedInUser');
-        if (!currentUser) {
-            alert("Please log in to your account before placing an order.");
-            window.location.href = "login.html";
-            return;
-        }
-        window.location.href = "cart.html"; 
+      e.stopPropagation();
+      const currentUser = sessionStorage.getItem('loggedInUser');
+      if (!currentUser) {
+        alert("Please log in to your account before placing an order.");
+        window.location.href = "login.html";
+        return;
+      }
+      window.location.href = "cart.html";
     });
   }
 
@@ -272,13 +272,13 @@ document.addEventListener('DOMContentLoaded', function() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
-}); 
+});
 
 async function loadProducts() {
   const productGrid = document.getElementById('product-grid');
-    if (!productGrid) return;
-    try {
-        const res = await fetch(API + '/api/products');
+  if (!productGrid) return;
+  try {
+    const res = await fetch(API + '/api/products');
     const list = await res.json();
     if (!list || list.length === 0) {
       productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px;">No products available.</p>';
@@ -319,10 +319,9 @@ function categoryFilters() {
     });
   });
 }
-<<<<<<< HEAD
 
 // --- Smooth Scroll-driven Animations using IntersectionObserver ---
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const observerOptions = {
     root: null,
     rootMargin: '0px 0px -8% 0px', // Trigger slightly before element completely enters the viewport
@@ -349,5 +348,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
-=======
->>>>>>> cb611d33e0f030b1c35eca5ca478e26c454e9768
