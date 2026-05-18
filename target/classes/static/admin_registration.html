@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/logo.png">
+  <title>Admin Registration | FreshMart</title>
+  <link rel="stylesheet" href="css/register_login.css">
+</head>
+<body>
+  <header class="navbar">
+    <h1 class="head">FreshMart Admin Portal</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+  <main class="login-wrapper">
+    <div class="container">
+      <form id="adminRegisterForm">
+        <h2>Admin Registration</h2>
+        <div class="input-field">
+          <input type="text" id="regEmail" required>
+          <label>Enter admin email</label>
+        </div>
+        <div class="input-field">
+          <input type="password" id="regPassword" required>
+          <label>Enter admin password</label>
+        </div>
+        <div class="input-field">
+          <input type="password" id="confirmPassword" required>
+          <label>Re-enter admin password</label>
+        </div>
+        <button type="submit">Register Admin</button>
+      </form>
+    </div>
+  </main>
+  <script src="js/admin_registration.js"></script>
+</body>
+</html>
