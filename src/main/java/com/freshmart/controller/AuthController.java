@@ -32,6 +32,7 @@ public class AuthController {
             if (email == null || email.isBlank()) {
                 return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Email required"));
             }
+<<<<<<< HEAD
 
             boolean isAdmin = false;
             String actualEmail = email;
@@ -51,6 +52,12 @@ public class AuthController {
             }
 
             emailService.sendVerificationCode(actualEmail);
+=======
+            if (customerFileService.existsByEmail(email)) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Email already registered"));
+            }
+            emailService.sendVerificationCode(email);
+>>>>>>> cb611d33e0f030b1c35eca5ca478e26c454e9768
             return ResponseEntity.ok(Map.of("success", true, "message", "Verification code sent"));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("success", false, "message", e.getMessage()));
@@ -83,6 +90,7 @@ public class AuthController {
                 return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Email, password, and verification code required"));
             }
 
+<<<<<<< HEAD
             boolean isAdmin = false;
             String actualEmail = dto.getEmail();
             if (dto.getEmail().toLowerCase().startsWith("admin:")) {
@@ -117,6 +125,27 @@ public class AuthController {
                 customerFileService.saveCustomer(dto);
                 return ResponseEntity.ok(Map.of("success", true, "message", "Customer registered successfully"));
             }
+=======
+            // 2. Prevent Duplicate Registration
+            if (customerFileService.existsByEmail(dto.getEmail())) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Email already registered"));
+            }
+
+            // 3. Verify the generated 6-digit code
+            if (!emailService.verifyCode(dto.getEmail(), dto.getVerificationCode())) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Invalid or expired verification code"));
+            }
+
+            /**
+             * 3. SANITIZATION: Ensure 'admin' role is impossible.
+             * If your CustomerDto has a 'role' or 'isAdmin' field, reset it here.
+             * Even better: only the fields in CustomerDto will be mapped by Spring.
+             */
+            // dto.setRole("CUSTOMER"); // If such a field exists in your DTO
+
+            customerFileService.saveCustomer(dto);
+            return ResponseEntity.ok(Map.of("success", true, "message", "Customer registered successfully"));
+>>>>>>> cb611d33e0f030b1c35eca5ca478e26c454e9768
 
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("success", false, "message", "Server error during registration"));

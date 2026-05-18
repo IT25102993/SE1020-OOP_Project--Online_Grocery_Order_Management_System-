@@ -4,34 +4,33 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "order_items")
-public class OrderItem {
+@Table(
+        name = "cart_items",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"customer_id", "product_id"})
+)
+public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     @JsonIgnore
-    private Order order;
+    private Customer customer;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     private Integer quantity;
-    private Double price;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public Order getOrder() { return order; }
-    public void setOrder(Order order) { this.order = order; }
+    public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer customer) { this.customer = customer; }
     public Product getProduct() { return product; }
     public void setProduct(Product product) { this.product = product; }
     public Integer getQuantity() { return quantity; }
     public void setQuantity(Integer quantity) { this.quantity = quantity; }
-    public Double getPrice() { return price; }
-    public void setPrice(Double price) { this.price = price; }
 }
-

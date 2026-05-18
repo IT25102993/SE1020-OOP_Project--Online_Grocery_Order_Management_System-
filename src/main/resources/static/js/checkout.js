@@ -10,8 +10,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+<<<<<<< HEAD
     async function loadSummary() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
+=======
+    function mapBackendItem(item) {
+        return {
+            id: item.product.productId,
+            name: item.product.name,
+            price: item.product.price || 0,
+            quantity: item.quantity
+        };
+    }
+
+    async function getCartItems() {
+        const response = await fetch(`/api/cart/${encodeURIComponent(currentUser)}`);
+        const items = await response.json();
+        return items.map(mapBackendItem);
+    }
+
+    async function loadSummary() {
+        const cart = await getCartItems();
+>>>>>>> cb611d33e0f030b1c35eca5ca478e26c454e9768
         if (cart.length === 0) {
             alert("Your cart is empty!");
             window.location.href = "order.html";
@@ -78,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     checkoutForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cart = await getCartItems();
         const total = totalAmountSpan.innerText;
 
         const paymentMethodEl = document.getElementById('payment-method');
@@ -122,8 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Success message
                 alert(`Thank you! Your order has been placed successfully.`);
                 
-                // Clear cart
-                localStorage.removeItem('cart');
+                await fetch(`/api/cart/clear/${encodeURIComponent(currentUser)}`, {
+                    method: 'DELETE'
+                });
                 
                 // Redirect to profile to see orders
                 window.location.href = "profile.html";
@@ -136,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+<<<<<<< HEAD
     async function populateUserDetails() {
         const fullNameInput = document.getElementById('full-name');
         const addressInput = document.getElementById('address');
@@ -158,4 +180,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadSummary();
     populateUserDetails();
+=======
+    loadSummary().catch(error => {
+        console.error("Checkout cart load error:", error);
+        alert("Could not load your cart. Please try again.");
+        window.location.href = "cart.html";
+    });
+>>>>>>> cb611d33e0f030b1c35eca5ca478e26c454e9768
 });

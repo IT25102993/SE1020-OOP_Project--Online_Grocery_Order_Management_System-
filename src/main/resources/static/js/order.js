@@ -1,6 +1,22 @@
 const API = '';
 let cartCount = 0; // Moved to global scope to be accessible by all functions
 
+async function getCartForCurrentUser() {
+  const currentUser = sessionStorage.getItem('loggedInUser');
+  if (!currentUser) {
+    return JSON.parse(sessionStorage.getItem('sessionCart')) || [];
+  }
+
+  const response = await fetch(`/api/cart/${encodeURIComponent(currentUser)}`);
+  const items = await response.json();
+  return items.map(item => ({
+    id: item.product.productId,
+    name: item.product.name,
+    price: item.product.price || 0,
+    quantity: item.quantity
+  }));
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   const authLink = document.getElementById('auth-link');
   const adminContainer = document.getElementById('admin-link-container');
@@ -39,15 +55,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Modified updateIsland to handle guest/login logic
   // forcedShow is true when we explicitly want the island to appear (e.g. after adding an item)
-  window.updateIsland = function(forcedShow = false) {
+  window.updateIsland = async function(forcedShow = false) {
     const currentUser = sessionStorage.getItem('loggedInUser');
     let cart = [];
     
-    // Logic: Guests use sessionStorage (survives refreshes), Members use localStorage
-    if (currentUser) {
-      cart = JSON.parse(localStorage.getItem('cart')) || [];
-    } else {
-      cart = JSON.parse(sessionStorage.getItem('sessionCart')) || [];
+    try {
+      cart = await getCartForCurrentUser();
+    } catch (error) {
+      console.error("Cart count load error:", error);
+      cart = [];
     }
     
     const count = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -79,14 +95,14 @@ document.addEventListener('DOMContentLoaded', function() {
   updateIsland(false); // Initial load check
 
   // Re-defining global addToCart to handle both UI and Island
-  window.addToCart = function (button, name, price, id) {
+  window.addToCart = async function (button, name, price, id) {
     const currentUser = sessionStorage.getItem('loggedInUser');
     
     let cart = [];
-    if (currentUser) {
-        cart = JSON.parse(localStorage.getItem('cart')) || [];
-    } else {
-        cart = JSON.parse(sessionStorage.getItem('sessionCart')) || [];
+    try {
+      cart = await getCartForCurrentUser();
+    } catch (error) {
+      console.error("Cart read error:", error);
     }
 
     const itemIndex = cart.findIndex(item => item.id === id);
@@ -99,9 +115,26 @@ document.addEventListener('DOMContentLoaded', function() {
       cart.push({ id, name, price: parseFloat(price), quantity: 1 });
     }
     
-    // Save based on status
     if (currentUser) {
-      localStorage.setItem('cart', JSON.stringify(cart));
+      try {
+        const response = await fetch('/api/cart/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customerEmail: currentUser,
+            productId: id,
+            quantity: 1
+          })
+        });
+        const result = await response.json();
+        if (!result.success) {
+          alert(result.message || "Could not add item to cart.");
+          return;
+        }
+      } catch (error) {
+        alert("Could not connect to cart backend.");
+        return;
+      }
     } else {
       sessionStorage.setItem('sessionCart', JSON.stringify(cart));
     }
@@ -145,28 +178,41 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (qtyMinus) {
-    qtyMinus.addEventListener("click", (e) => {
+    qtyMinus.addEventListener("click", async (e) => {
         e.stopPropagation();
         if (!currentIslandItemId) return;
         const currentUser = sessionStorage.getItem('loggedInUser');
-        let cart = [];
-        if (currentUser) {
-          cart = JSON.parse(localStorage.getItem('cart')) || [];
-        } else {
-          cart = JSON.parse(sessionStorage.getItem('sessionCart')) || [];
-        }
+        let cart = await getCartForCurrentUser();
         
         const itemIndex = cart.findIndex(item => item.id === currentIslandItemId);
         if (itemIndex > -1 && cart[itemIndex].quantity > 1) {
             cart[itemIndex].quantity--;
-            if (currentUser) localStorage.setItem('cart', JSON.stringify(cart));
-            else sessionStorage.setItem('sessionCart', JSON.stringify(cart));
+            if (currentUser) {
+              await fetch('/api/cart/update', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  customerEmail: currentUser,
+                  productId: currentIslandItemId,
+                  quantity: cart[itemIndex].quantity
+                })
+              });
+            } else {
+              sessionStorage.setItem('sessionCart', JSON.stringify(cart));
+            }
             islandQtyInput.value = cart[itemIndex].quantity;
             updateIsland(true);
         } else if (itemIndex > -1 && cart[itemIndex].quantity === 1) {
             cart.splice(itemIndex, 1);
-            if (currentUser) localStorage.setItem('cart', JSON.stringify(cart));
-            else sessionStorage.setItem('sessionCart', JSON.stringify(cart));
+            if (currentUser) {
+              const params = new URLSearchParams({
+                customerEmail: currentUser,
+                productId: currentIslandItemId
+              });
+              await fetch(`/api/cart/remove?${params.toString()}`, { method: 'DELETE' });
+            } else {
+              sessionStorage.setItem('sessionCart', JSON.stringify(cart));
+            }
             island.classList.remove("expanded");
             updateIsland(true);
         }
@@ -174,22 +220,28 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   if (qtyPlus) {
-    qtyPlus.addEventListener("click", (e) => {
+    qtyPlus.addEventListener("click", async (e) => {
         e.stopPropagation();
         if (!currentIslandItemId) return;
         const currentUser = sessionStorage.getItem('loggedInUser');
-        let cart = [];
-        if (currentUser) {
-          cart = JSON.parse(localStorage.getItem('cart')) || [];
-        } else {
-          cart = JSON.parse(sessionStorage.getItem('sessionCart')) || [];
-        }
+        let cart = await getCartForCurrentUser();
 
         const itemIndex = cart.findIndex(item => item.id === currentIslandItemId);
         if (itemIndex > -1) {
             cart[itemIndex].quantity++;
-            if (currentUser) localStorage.setItem('cart', JSON.stringify(cart));
-            else sessionStorage.setItem('sessionCart', JSON.stringify(cart));
+            if (currentUser) {
+              await fetch('/api/cart/update', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  customerEmail: currentUser,
+                  productId: currentIslandItemId,
+                  quantity: cart[itemIndex].quantity
+                })
+              });
+            } else {
+              sessionStorage.setItem('sessionCart', JSON.stringify(cart));
+            }
             islandQtyInput.value = cart[itemIndex].quantity;
             updateIsland(true);
         }
@@ -267,6 +319,7 @@ function categoryFilters() {
     });
   });
 }
+<<<<<<< HEAD
 
 // --- Smooth Scroll-driven Animations using IntersectionObserver ---
 document.addEventListener('DOMContentLoaded', function() {
@@ -296,3 +349,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+=======
+>>>>>>> cb611d33e0f030b1c35eca5ca478e26c454e9768
