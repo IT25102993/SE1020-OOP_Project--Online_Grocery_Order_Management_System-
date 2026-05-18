@@ -14,6 +14,7 @@ public class FreshMartApplication {
     }
 
     @Bean
+    @org.springframework.context.annotation.Profile("!test")
     public CommandLineRunner databaseMigrator(JdbcTemplate jdbcTemplate) {
         return args -> {
             try {

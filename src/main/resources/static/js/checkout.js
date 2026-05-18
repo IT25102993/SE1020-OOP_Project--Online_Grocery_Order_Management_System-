@@ -10,10 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-<<<<<<< HEAD
-    async function loadSummary() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-=======
     function mapBackendItem(item) {
         return {
             id: item.product.productId,
@@ -31,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadSummary() {
         const cart = await getCartItems();
->>>>>>> cb611d33e0f030b1c35eca5ca478e26c454e9768
         if (cart.length === 0) {
             alert("Your cart is empty!");
             window.location.href = "order.html";
@@ -157,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-<<<<<<< HEAD
     async function populateUserDetails() {
         const fullNameInput = document.getElementById('full-name');
         const addressInput = document.getElementById('address');
@@ -178,13 +172,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    loadSummary();
-    populateUserDetails();
-=======
     loadSummary().catch(error => {
         console.error("Checkout cart load error:", error);
         alert("Could not load your cart. Please try again.");
         window.location.href = "cart.html";
     });
->>>>>>> cb611d33e0f030b1c35eca5ca478e26c454e9768
+    populateUserDetails();
 });
