@@ -45,18 +45,22 @@ loginForm.addEventListener('submit', async function(e) {
     if (res.ok && data.success) {
       // Migrate guest cart to member cart
       const guestCart = JSON.parse(sessionStorage.getItem('sessionCart'));
-      if (guestCart && guestCart.length > 0) {
-          let memberCart = JSON.parse(localStorage.getItem('cart')) || [];
-          // Simple merge: append items or update quantities
-          guestCart.forEach(gItem => {
-              const mIndex = memberCart.findIndex(mItem => mItem.id === gItem.id);
-              if (mIndex > -1) {
-                  memberCart[mIndex].quantity += gItem.quantity;
-              } else {
-                  memberCart.push(gItem);
+      if (guestCart && guestCart.length > 0 && role === 'customer') {
+          for (const gItem of guestCart) {
+              try {
+                  await fetch('/api/cart/add', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                          customerEmail: data.email,
+                          productId: gItem.id,
+                          quantity: gItem.quantity
+                      })
+                  });
+              } catch (error) {
+                  console.error("Failed to migrate cart item:", gItem, error);
               }
-          });
-          localStorage.setItem('cart', JSON.stringify(memberCart));
+          }
           sessionStorage.removeItem('sessionCart');
       }
 
