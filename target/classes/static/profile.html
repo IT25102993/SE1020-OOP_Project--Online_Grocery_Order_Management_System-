@@ -31,6 +31,9 @@
                 <input type="file" id="profile-upload" style="display: none;" accept="image/*">
                 <h2 id="display-name">User Name</h2>
                 <p id="display-email">user@example.com</p>
+                <div id="membership-badge-wrap" style="margin-top: 10px;">
+                    <span id="membership-badge" class="badge-silver">freshmartSilver (Regular)</span>
+                </div>
             </div>
 
             <div class="details-section">
@@ -47,6 +50,13 @@
                     <div class="form-group">
                         <label>Shipping Address</label>
                         <input type="text" id="profile-address" required placeholder="Enter your full address">
+                    </div>
+                    <div class="form-group">
+                        <label>Membership Level</label>
+                        <select id="profile-membership" style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95em; outline: none; transition: 0.3s; background: white;">
+                            <option value="REGULAR">freshmartSilver (Regular)</option>
+                            <option value="PREMIUM">freshmartGOLD (Premium)</option>
+                        </select>
                     </div>
                     
                     <div id="verification-wrap" style="display: none;">

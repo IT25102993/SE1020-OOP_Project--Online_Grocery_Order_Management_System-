@@ -8,6 +8,7 @@ public class CustomerDto {
     private String verificationCode;
 
     private String profilePicture;
+    private String customerType;
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -21,4 +22,6 @@ public class CustomerDto {
     public void setVerificationCode(String verificationCode) { this.verificationCode = verificationCode; }
     public String getProfilePicture() { return profilePicture; }
     public void setProfilePicture(String profilePicture) { this.profilePicture = profilePicture; }
+    public String getCustomerType() { return customerType; }
+    public void setCustomerType(String customerType) { this.customerType = customerType; }
 }

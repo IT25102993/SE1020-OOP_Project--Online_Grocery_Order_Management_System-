@@ -2,8 +2,11 @@ package com.freshmart.service;
 
 import com.freshmart.dto.CustomerDto;
 import com.freshmart.entity.Customer;
+import com.freshmart.entity.PremiumCustomer;
+import com.freshmart.entity.RegularCustomer;
 import com.freshmart.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +21,12 @@ public class CustomerFileService {
     }
 
     public void saveCustomer(CustomerDto dto) {
-        Customer customer = new Customer();
+        Customer customer;
+        if ("PREMIUM".equalsIgnoreCase(dto.getCustomerType())) {
+            customer = new PremiumCustomer();
+        } else {
+            customer = new RegularCustomer();
+        }
         customer.setName(dto.getName());
         customer.setEmail(dto.getEmail());
         customer.setAddress(dto.getAddress());
@@ -45,10 +53,12 @@ public class CustomerFileService {
             dto.setAddress(customer.getAddress());
             dto.setPassword(customer.getPassword());
             dto.setProfilePicture(customer.getProfilePicture());
+            dto.setCustomerType(customer.getCustomerType());
             return dto;
         }).collect(Collectors.toList());
     }
 
+    @Transactional
     public void updateCustomer(CustomerDto dto) {
         Customer customer = customerRepository.findByEmailIgnoreCase(dto.getEmail())
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
@@ -57,6 +67,11 @@ public class CustomerFileService {
         if (dto.getProfilePicture() != null) {
             customer.setProfilePicture(dto.getProfilePicture());
         }
+        
         customerRepository.save(customer);
+
+        if (dto.getCustomerType() != null && !dto.getCustomerType().equalsIgnoreCase(customer.getCustomerType())) {
+            customerRepository.updateCustomerType(customer.getId(), dto.getCustomerType().toUpperCase());
+        }
     }
 }

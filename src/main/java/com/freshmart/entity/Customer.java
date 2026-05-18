@@ -1,13 +1,12 @@
 package com.freshmart.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "customers")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "customer_type", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("CUSTOMER")
 public class Customer {
 
     @Id
@@ -32,4 +31,11 @@ public class Customer {
     public void setPassword(String password) { this.password = password; }
     public String getProfilePicture() { return profilePicture; }
     public void setProfilePicture(String profilePicture) { this.profilePicture = profilePicture; }
+
+    public String getCustomerType() {
+        if (this instanceof PremiumCustomer) {
+            return "PREMIUM";
+        }
+        return "REGULAR";
+    }
 }

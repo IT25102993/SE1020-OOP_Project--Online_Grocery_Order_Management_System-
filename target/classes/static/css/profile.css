@@ -18,7 +18,7 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background-color: transparent;
     color: var(--text-color);
     line-height: 1.6;
 }
@@ -494,4 +494,31 @@ body::before {
         left: 20px;
         right: 20px;
     }
+}
+
+/* Membership Badges */
+.badge-silver {
+    background: #e0e0e0;
+    color: #555;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    display: inline-block;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    border: 1px solid #ccc;
+    text-transform: uppercase;
+}
+
+.badge-gold {
+    background: linear-gradient(135deg, #ffd700, #ffa500);
+    color: #14284a;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: bold;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
+    border: 1px solid #e5a900;
+    text-transform: uppercase;
 }

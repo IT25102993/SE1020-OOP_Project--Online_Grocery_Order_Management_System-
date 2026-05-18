@@ -164,11 +164,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     </span>
                 `;
 
+                let orderDateStr = order.orderDate;
+                if (Array.isArray(order.orderDate)) {
+                    const [y, m, d, hr, min, sec] = order.orderDate;
+                    orderDateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}T${String(hr).padStart(2, '0')}:${String(min).padStart(2, '0')}:${String(sec || 0).padStart(2, '0')}`;
+                }
+                const orderDateFormatted = orderDateStr ? new Date(orderDateStr).toLocaleString() : '—';
+
                 card.innerHTML = `
                     <div class="order-header" style="${order.status === 'COMPLETED' ? 'justify-content: center; flex-direction: column; text-align: center;' : ''}">
                         <div style="${order.status === 'COMPLETED' ? 'margin-bottom: 15px;' : ''}">
                             <strong>Order #${order.id}</strong> | <span>${order.customer.name} (${order.customer.email})</span><br>
-                            <small>${new Date(order.orderDate).toLocaleString()}</small>
+                            <small>${orderDateFormatted}</small>
                         </div>
                         <span class="status-badge status-${order.status}" style="${order.status === 'COMPLETED' ? 'font-size: 1.2em; padding: 8px 20px;' : ''}">${order.status}</span>
                     </div>

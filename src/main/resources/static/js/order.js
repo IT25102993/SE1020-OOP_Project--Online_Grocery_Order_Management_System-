@@ -267,3 +267,32 @@ function categoryFilters() {
     });
   });
 }
+
+// --- Smooth Scroll-driven Animations using IntersectionObserver ---
+document.addEventListener('DOMContentLoaded', function() {
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -8% 0px', // Trigger slightly before element completely enters the viewport
+    threshold: 0.05
+  };
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target); // Stop observing once visible for best page performance
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.autoShow, .autoBLur').forEach(el => {
+      observer.observe(el);
+    });
+  } else {
+    // Fallback for older browsers: show elements immediately
+    document.querySelectorAll('.autoShow, .autoBLur').forEach(el => {
+      el.classList.add('visible');
+    });
+  }
+});

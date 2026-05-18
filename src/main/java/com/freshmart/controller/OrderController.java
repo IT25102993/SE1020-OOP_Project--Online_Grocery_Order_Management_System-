@@ -30,36 +30,128 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> placeOrder(@RequestBody OrderRequest request) {
         try {
+            if (request.getItems() == null || request.getItems().isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Order must contain at least one item"));
+            }
+
             Customer customer = customerRepository.findByEmailIgnoreCase(request.getCustomerEmail())
                     .orElseThrow(() -> new RuntimeException("Customer not found"));
 
             Order order = new Order();
             order.setCustomer(customer);
-            order.setTotalAmount(request.getTotalAmount());
+
+            boolean isPremium = customer instanceof PremiumCustomer;
+            double calculatedTotal = 0.0;
 
             List<OrderItem> items = new ArrayList<>();
             if (request.getItems() != null) {
                 for (OrderItemRequest ir : request.getItems()) {
                     Product product = productRepository.findByProductId(ir.getProductId())
                             .orElseThrow(() -> new RuntimeException("Product not found: " + ir.getProductId()));
+                    
+                    double originalPrice = product.getPrice();
+                    double finalPrice = originalPrice;
+
+                    // Repeat-purchase discount: 5% off if purchased 3+ times in total in past
+                    if (isPremium) {
+                        Long pastQty = orderService.getPastProductQuantity(customer, product);
+                        if (pastQty >= 3) {
+                            finalPrice = originalPrice * 0.95;
+                        }
+                    }
+
                     OrderItem item = new OrderItem();
                     item.setProduct(product);
                     item.setQuantity(ir.getQuantity());
-                    item.setPrice(ir.getPrice());
+                    item.setPrice(finalPrice);
                     item.setOrder(order); // CRITICAL: Link item to order for JPA cascade
                     items.add(item);
+
+                    calculatedTotal += finalPrice * ir.getQuantity();
                 }
             }
             order.setItems(items);
 
-            Order savedOrder = orderService.placeOrder(order, request.getPaymentMethod(), request.getCardBank());
+            // Add delivery charge
+            double deliveryCharge = isPremium ? 0.0 : 99.99;
+            calculatedTotal += deliveryCharge;
+
+            order.setTotalAmount(calculatedTotal);
+
+            Order savedOrder = orderService.placeOrder(order, request);
             return ResponseEntity.ok(Map.of("success", true, "order", savedOrder));
         } catch (Exception e) {
             return ResponseEntity.ok(Map.of("success", false, "message", e.getMessage()));
         }
     }
 
-    @GetMapping("/customer/{email}")
+    @PostMapping("/calculate-summary")
+    public ResponseEntity<?> calculateSummary(@RequestBody OrderRequest request) {
+        try {
+            if (request.getItems() == null || request.getItems().isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Order must contain at least one item"));
+            }
+
+            Customer customer = customerRepository.findByEmailIgnoreCase(request.getCustomerEmail())
+                    .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+            boolean isPremium = customer instanceof PremiumCustomer;
+            double subtotal = 0.0;
+            double discount = 0.0;
+            List<Map<String, Object>> itemSummaries = new ArrayList<>();
+
+            if (request.getItems() != null) {
+                for (OrderItemRequest ir : request.getItems()) {
+                    Product product = productRepository.findByProductId(ir.getProductId())
+                            .orElseThrow(() -> new RuntimeException("Product not found: " + ir.getProductId()));
+
+                    double originalPrice = product.getPrice();
+                    double finalPrice = originalPrice;
+                    boolean hasDiscount = false;
+
+                    if (isPremium) {
+                        Long pastQty = orderService.getPastProductQuantity(customer, product);
+                        if (pastQty >= 3) {
+                            finalPrice = originalPrice * 0.95;
+                            hasDiscount = true;
+                        }
+                    }
+
+                    double itemTotal = finalPrice * ir.getQuantity();
+                    subtotal += originalPrice * ir.getQuantity();
+                    if (hasDiscount) {
+                        discount += (originalPrice - finalPrice) * ir.getQuantity();
+                    }
+
+                    itemSummaries.add(Map.of(
+                        "productId", product.getProductId(),
+                        "name", product.getName(),
+                        "quantity", ir.getQuantity(),
+                        "originalPrice", originalPrice,
+                        "finalPrice", finalPrice,
+                        "hasDiscount", hasDiscount,
+                        "itemTotal", itemTotal
+                    ));
+                }
+            }
+
+            double deliveryCharge = isPremium ? 0.0 : 99.99;
+            double total = subtotal - discount + deliveryCharge;
+
+            return ResponseEntity.ok(Map.of(
+                "subtotal", subtotal,
+                "discount", discount,
+                "deliveryCharge", deliveryCharge,
+                "total", total,
+                "items", itemSummaries,
+                "membershipType", customer.getCustomerType() != null ? customer.getCustomerType() : "REGULAR"
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/customer/{email:.+}")
     public ResponseEntity<List<Order>> getCustomerOrders(@PathVariable String email) {
         return customerRepository.findByEmailIgnoreCase(email)
                 .map(customer -> ResponseEntity.ok(orderService.getCustomerOrders(customer)))

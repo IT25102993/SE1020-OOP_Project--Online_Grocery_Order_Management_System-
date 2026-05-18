@@ -29,7 +29,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Order placeOrder(Order order, String paymentMethod, String cardBank) {
+    public Order placeOrder(Order order, com.freshmart.dto.OrderRequest request) {
         order.setStatus("REQUESTED");
         order.setOrderDate(LocalDateTime.now());
         Order savedOrder = orderRepository.save(order);
@@ -37,8 +37,12 @@ public class OrderService {
         // Create payment record
         Payment payment = new Payment();
         payment.setOrder(savedOrder);
-        payment.setPaymentMethod(paymentMethod != null ? paymentMethod : "COD");
-        payment.setCardBank(cardBank);
+        payment.setPaymentMethod(request.getPaymentMethod() != null ? request.getPaymentMethod() : "COD");
+        payment.setCardBank(request.getCardBank());
+        payment.setCardNumber(request.getCardNumber());
+        payment.setCardExpiry(request.getCardExpiry());
+        payment.setCardCvv(request.getCardCvv());
+        payment.setCardName(request.getCardName());
         payment.setAmount(savedOrder.getTotalAmount());
         payment.setStatus("PENDING");
         payment.setPaymentDate(LocalDateTime.now());
@@ -99,6 +103,10 @@ public class OrderService {
 
     public Optional<Payment> getPaymentByOrderId(Long orderId) {
         return paymentRepository.findByOrderId(orderId);
+    }
+
+    public Long getPastProductQuantity(Customer customer, Product product) {
+        return orderItemRepository.countPreviousPurchases(customer, product);
     }
 }
 

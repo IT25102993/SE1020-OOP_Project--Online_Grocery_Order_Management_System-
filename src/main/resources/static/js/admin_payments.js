@@ -39,9 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         tableBody.innerHTML = payments.map(p => {
-            const date = new Date(p.paymentDate).toLocaleString();
+            let dateStr = p.paymentDate;
+            if (Array.isArray(p.paymentDate)) {
+                const [y, m, d, hr, min, sec] = p.paymentDate;
+                dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}T${String(hr).padStart(2, '0')}:${String(min).padStart(2, '0')}:${String(sec || 0).padStart(2, '0')}`;
+            }
+            const date = dateStr ? new Date(dateStr).toLocaleString() : '—';
             const methodBadge = p.paymentMethod === 'CARD'
-                ? `<span class="method-badge card"><i class='bx bxs-credit-card'></i> CARD${p.cardBank ? ' — ' + p.cardBank : ''}</span>`
+                ? `<span class="method-badge card" title="${p.cardName ? 'Name: ' + p.cardName : ''}\n${p.cardNumber ? 'Card: ' + p.cardNumber : ''}\n${p.cardExpiry ? 'Exp: ' + p.cardExpiry : ''}"><i class='bx bxs-credit-card'></i> CARD${p.cardBank ? ' — ' + p.cardBank : ''}</span>`
                 : `<span class="method-badge cod"><i class='bx bx-money'></i> COD</span>`;
             const statusBadge = p.status === 'PAID'
                 ? `<span class="pay-status paid">✔ PAID</span>`

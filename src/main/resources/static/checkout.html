@@ -110,7 +110,23 @@
         <div class="order-summary">
             <h2>Order Summary</h2>
             <div id="summary-items-list"></div>
-            <div class="summary-total">
+            
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+            
+            <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: #666;">
+                <span>Subtotal</span>
+                <span>Rs. <span id="summary-subtotal">0.00</span></span>
+            </div>
+            <div class="summary-row" id="summary-discount-row" style="display: none; justify-content: space-between; margin-bottom: 10px; font-size: 14px; color: #e53e3e; font-weight: 500;">
+                <span>Repeat Purchase Discount (5%)</span>
+                <span>-Rs. <span id="summary-discount">0.00</span></span>
+            </div>
+            <div class="summary-row" style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px; color: #666;">
+                <span>Delivery Charges</span>
+                <span>Rs. <span id="summary-delivery">0.00</span></span>
+            </div>
+            
+            <div class="summary-total" style="border-top: 2px solid #eee; padding-top: 15px;">
                 <span>Total</span>
                 <span>Rs. <span id="summary-total-amount">0</span></span>
             </div>

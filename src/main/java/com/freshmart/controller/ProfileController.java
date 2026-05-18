@@ -1,5 +1,6 @@
 package com.freshmart.controller;
 
+import com.freshmart.dto.CustomerDto;
 import com.freshmart.entity.Customer;
 import com.freshmart.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,21 @@ public class ProfileController {
 
     public ProfileController(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
+    }
+
+    @GetMapping("/by-email/{email:.+}")
+    public ResponseEntity<?> getCustomerByEmail(@PathVariable String email) {
+        return customerRepository.findByEmailIgnoreCase(email)
+                .map(customer -> {
+                    CustomerDto dto = new CustomerDto();
+                    dto.setName(customer.getName());
+                    dto.setEmail(customer.getEmail());
+                    dto.setAddress(customer.getAddress());
+                    dto.setProfilePicture(customer.getProfilePicture());
+                    dto.setCustomerType(customer.getCustomerType());
+                    return ResponseEntity.ok(dto);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/upload-profile-pic")

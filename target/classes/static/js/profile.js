@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const profileImg = document.getElementById('profile-img');
     const avatarContainer = document.getElementById('avatar-container');
     const profileUpload = document.getElementById('profile-upload');
+    const membershipBadge = document.getElementById('membership-badge');
+    const membershipSelect = document.getElementById('profile-membership');
 
     const currentUserEmail = sessionStorage.getItem('loggedInUser');
     if (!currentUserEmail) {
@@ -28,11 +30,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Load current data
     async function fetchUserData() {
         try {
-            const res = await fetch('/api/auth/customer/all');
-            const customers = await res.json();
-            const user = customers.find(c => c.email.toLowerCase() === currentUserEmail.toLowerCase());
-            
-            if (user) {
+            const res = await fetch(`/api/customer/by-email/${encodeURIComponent(currentUserEmail)}`);
+            if (res.ok) {
+                const user = await res.json();
                 emailInput.value = user.email;
                 nameInput.value = user.name || '';
                 addressInput.value = user.address || '';
@@ -43,6 +43,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                     profileImg.src = user.profilePicture;
                 } else {
                     profileImg.src = 'images/profile_avatar.png';
+                }
+
+                // Render Badge and Select Dropdown
+                if (user.customerType === 'PREMIUM') {
+                    if (membershipBadge) {
+                        membershipBadge.textContent = 'freshmartGOLD (Premium)';
+                        membershipBadge.className = 'badge-gold';
+                    }
+                    if (membershipSelect) membershipSelect.value = 'PREMIUM';
+                } else {
+                    if (membershipBadge) {
+                        membershipBadge.textContent = 'freshmartSilver (Regular)';
+                        membershipBadge.className = 'badge-silver';
+                    }
+                    if (membershipSelect) membershipSelect.value = 'REGULAR';
                 }
             }
         } catch (err) {
@@ -155,6 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             email: emailInput.value,
             name: nameInput.value,
             address: addressInput.value,
+            customerType: membershipSelect ? membershipSelect.value : 'REGULAR',
             verificationCode: profileCodeInput.value.trim()
         };
 
@@ -183,6 +199,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 timerDisplay.textContent = '';
                 
                 displayName.textContent = updateData.name;
+
+                // Update badge immediately without full reload
+                if (updateData.customerType === 'PREMIUM') {
+                    if (membershipBadge) {
+                        membershipBadge.textContent = 'freshmartGOLD (Premium)';
+                        membershipBadge.className = 'badge-gold';
+                    }
+                } else {
+                    if (membershipBadge) {
+                        membershipBadge.textContent = 'freshmartSilver (Regular)';
+                        membershipBadge.className = 'badge-silver';
+                    }
+                }
             } else {
                 message.style.color = '#ff4d4d';
                 message.innerText = result.message || 'Update failed.';
@@ -232,7 +261,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             ordersList.innerHTML = '';
             orders.forEach(order => {
                 const currentStep = statusMap[order.status] || 0;
-                const orderDate = new Date(order.orderDate).toLocaleString();
+                let orderDateStr = order.orderDate;
+                if (Array.isArray(order.orderDate)) {
+                    const [y, m, d, hr, min, sec] = order.orderDate;
+                    orderDateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}T${String(hr).padStart(2, '0')}:${String(min).padStart(2, '0')}:${String(sec || 0).padStart(2, '0')}`;
+                }
+                const orderDate = orderDateStr ? new Date(orderDateStr).toLocaleString() : '—';
                 const isExpanded = expandedOrders.has(order.id.toString());
                 
                 let driverSection = '';

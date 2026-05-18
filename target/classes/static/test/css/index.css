@@ -121,13 +121,21 @@ body::before {
 
 .carousel-track {
   display: flex;
-  width: 300%; /* Adjust based on number of slides */
+  width: 400%; /* 4 slides in total (3 original + 1 clone) */
   height: 100%;
-  animation: slideScroll 15s infinite ease-in-out;
+  animation: seamlessCarousel 16s infinite ease-in-out;
+}
+
+@keyframes seamlessCarousel {
+  0%, 20% { transform: translateX(0); }               /* Slide 1 */
+  25%, 45% { transform: translateX(-25%); }            /* Slide 2 */
+  50%, 70% { transform: translateX(-50%); }            /* Slide 3 */
+  75%, 95% { transform: translateX(-75%); }            /* Slide 1 Clone */
+  100% { transform: translateX(-75%); }                /* Loops back instantly to 0% */
 }
 
 .carousel-slide {
-  width: 33.33%;
+  width: 25%; /* distributed equally across 400% container */
   position: relative;
   display: flex;
   align-items: center;
@@ -161,9 +169,20 @@ body::before {
 
 .staff-track {
     display: flex;
-    width: 300%; /* Adjust based on number of slides (e.g., 300% for 3 slides) */
+    width: 700%; /* 7 slides in total (6 original + 1 clone) */
     height: 100%;
-    animation: slideScroll 12s infinite ease-in-out;
+    animation: seamlessStaff 28s infinite ease-in-out;
+}
+
+@keyframes seamlessStaff {
+  0%, 11.4% { transform: translateX(0); }                             /* Staff 1 */
+  14.3%, 25.7% { transform: translateX(-14.2857%); }                  /* Staff 2 */
+  28.6%, 40% { transform: translateX(-28.5714%); }                    /* Staff 3 */
+  42.9%, 54.3% { transform: translateX(-42.8571%); }                  /* Staff 4 */
+  57.2%, 68.6% { transform: translateX(-57.1428%); }                  /* Staff 5 */
+  71.5%, 82.9% { transform: translateX(-71.4285%); }                  /* Staff 6 */
+  85.8%, 97.2% { transform: translateX(-85.7142%); }                  /* Staff 1 Clone */
+  100% { transform: translateX(-85.7142%); }                          /* Loops back instantly to 0% */
 }
 
 .staff-slide {
@@ -680,34 +699,65 @@ header img{
         transform: rotate(360deg);
     }
 }
-.autoShow{
-    animation: autoShowAnimation both;
-    animation-timeline: view(70% 5%);
+/* --- Premium Scroll-driven Animations using CSS Transitions --- */
+.autoShow {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
 
+.autoShow.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
-@keyframes autoShowAnimation{
-    from{
-        opacity: 0;
-        transform: translateY(200px) scale(0.3);
-    }to{
-         opacity: 1;
-         transform: translateY(0) scale(1);
-     }
+
+.autoBLur {
+    opacity: 0;
+    filter: blur(20px);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, filter;
 }
-.autoBLur{
-    animation: autoBLurAnimation linear both;
-    animation-timeline: view();
+
+.autoBLur.visible {
+    opacity: 1;
+    filter: blur(0);
 }
-@keyframes autoBLurAnimation{
-    0%{
-        filter: blur(40px);
-    }
-    45%, 55%{
-        filter: blur(0px);
-    }
-    100%{
-        filter: blur(40px);
-    }
+
+/* --- Horizontal Promotions Scroll Styling --- */
+.promotions {
+    overflow: hidden;
+    padding: 20px 0;
+    width: 100%;
+}
+
+.promotions > div {
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    padding: 15px 20px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch; /* for smooth inertial scroll on iOS */
+    scrollbar-width: none; /* Hide standard scrollbar for Firefox */
+}
+
+.promotions > div::-webkit-scrollbar {
+    display: none; /* Hide standard scrollbar for Chrome/Safari */
+}
+
+.promotions img {
+    flex-shrink: 0;
+    border-radius: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 450px;
+    max-width: 85vw; /* Make it responsive on mobile screens */
+    height: auto;
+}
+
+.promotions img:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.18);
 }
   @-webkit-keyframes rotating {
     from{
