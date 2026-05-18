@@ -1,6 +1,5 @@
 package com.freshmart.service;
 
-import com.freshmart.entity.ProductQuantity;
 import com.freshmart.repository.ProductQuantityRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

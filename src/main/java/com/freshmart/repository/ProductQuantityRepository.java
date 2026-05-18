@@ -1,6 +1,5 @@
 package com.freshmart.repository;
 
-import com.freshmart.entity.ProductQuantity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
